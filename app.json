@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Actuemos",
-    "slug": "Actuemos",
+    "name": "Actuamos",
+    "slug": "Actuamos",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./app/assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./app/assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Aplicación destinada a aplicar la terapia de Aceptación y compromiso para acompañar el proceso de duelo en el personal de la salud.",
+    "githubUrl": "https://github.com/JuanDavidPF/Actuamos-SourceCode"
   }
 }
