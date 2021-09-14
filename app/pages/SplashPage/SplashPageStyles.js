@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { AppColors } from "../../config/AppColors";
-import { FontsSizes } from "../../config/AppFonts";
+import { Fonts, FontsSizes } from "../../config/AppFonts";
 
 const container = {
   flex: 1,
@@ -16,7 +16,7 @@ const logotype = { width: 153, height: 48 };
 const slogan = {
   fontSize: FontsSizes.title,
   color: AppColors.white,
-  fontFamily: "Comfortaa_Light",
+  fontFamily: Fonts.Comfortaa.Light,
   top: 10,
 };
 

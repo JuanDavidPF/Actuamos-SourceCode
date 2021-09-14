@@ -3,7 +3,12 @@ import { View, Text, Image } from "react-native";
 
 import { SplashPageStyles } from "./SplashPageStyles";
 
-export default function SplashPage() {
+export default function SplashPage({ navigation }) {
+  //Remove Splash Screen once seen from stack
+  setTimeout(() => {
+    navigation.replace("Login");
+  }, 2000);
+
   return (
     <View style={SplashPageStyles.container}>
       <Image
