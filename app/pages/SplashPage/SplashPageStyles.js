@@ -14,7 +14,7 @@ const isotype = { width: 154, height: 148 };
 const logotype = { width: 153, height: 48 };
 
 const slogan = {
-  fontSize: FontsSizes.title,
+  fontSize: FontsSizes.subtitle,
   color: AppColors.white,
   fontFamily: Fonts.Comfortaa.Light,
   top: 10,

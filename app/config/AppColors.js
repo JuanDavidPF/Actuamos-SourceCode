@@ -3,4 +3,5 @@ export const AppColors = {
   secondary: "",
   accent: "",
   white: "#fff",
+  modalBackground: "rgba(255, 255, 255, 0.075)",
 };
