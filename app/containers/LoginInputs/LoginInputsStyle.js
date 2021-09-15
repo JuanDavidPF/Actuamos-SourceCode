@@ -10,6 +10,6 @@ export const LoginInputsStyles = StyleSheet.create({
     paddingVertical: 22,
     paddingHorizontal: 22,
     borderRadius: 20,
-    width: "85%",
+    width: "90%",
   },
 });

@@ -14,7 +14,7 @@ export const LoginPageStyles = StyleSheet.create({
     alignItems: "center",
   },
 
-  logo: { width: 100, height: 100 },
+  logo: { width: 100, height: 100, marginVertical: 30 },
   title: {
     fontFamily: Fonts.Lato.Bold,
     fontSize: FontsSizes.title,
