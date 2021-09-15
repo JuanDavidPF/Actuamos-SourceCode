@@ -12,5 +12,6 @@ export const InputTextStyles = StyleSheet.create({
     backgroundColor: AppColors.white,
     height: 53,
     borderRadius: 10,
+    marginVertical: 7.5,
   },
 });

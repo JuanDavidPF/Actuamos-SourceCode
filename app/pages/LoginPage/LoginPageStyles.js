@@ -7,11 +7,10 @@ export const LoginPageStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: AppColors.primary,
     alignItems: "center",
-    justifyContent: "space-around",
   },
   header: {
-    top: 100,
-
+    marginTop: 100,
+    marginBottom: 30,
     alignItems: "center",
   },
 

@@ -8,8 +8,8 @@ import { LoginInputsStyles } from "./LoginInputsStyle";
 export default function LoginInputs() {
   return (
     <View style={LoginInputsStyles.container}>
-      <InputText placeholder={"Usuario"}></InputText>
-      <InputText passwordInput={true} placeholder={"Contraseña"}></InputText>
+      <InputText placeholder={"Usuario"} />
+      <InputText passwordInput={true} placeholder={"Contraseña"} />
     </View>
   );
 }

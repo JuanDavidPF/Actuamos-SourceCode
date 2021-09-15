@@ -7,9 +7,9 @@ export const LoginInputsStyles = StyleSheet.create({
   container: {
     backgroundColor: AppColors.modalBackground,
     justifyContent: "space-between",
-    padding: 22,
+    paddingVertical: 22,
+    paddingHorizontal: 22,
     borderRadius: 20,
     width: "85%",
-    height: 170,
   },
 });
