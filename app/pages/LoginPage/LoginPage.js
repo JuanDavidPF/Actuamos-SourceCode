@@ -6,6 +6,10 @@ import KeyboardAvoidingWrapper from "../../utils/KeyboardAvoidingWrapper";
 import { LoginPageStyles } from "./LoginPageStyles";
 
 export default function LoginPage({ navigation }) {
+  const Login = (username, password) => {
+    navigation.navigate("Hub");
+  };
+
   return (
     <KeyboardAvoidingWrapper>
       <View style={LoginPageStyles.container}>
@@ -16,7 +20,7 @@ export default function LoginPage({ navigation }) {
           />
           <Text style={LoginPageStyles.title}>Iniciar Sesión</Text>
         </View>
-        <LoginInputs />
+        <LoginInputs submit={Login} />
       </View>
     </KeyboardAvoidingWrapper>
   );

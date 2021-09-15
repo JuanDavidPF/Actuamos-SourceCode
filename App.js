@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 //Pages
 import SplashPage from "./app/pages/SplashPage/SplashPage";
 import LoginPage from "./app/pages/LoginPage/LoginPage";
-
+import HubPage from "./app/pages/HubPage/HubPage";
 //Fonts
 import { Comfortaa_300Light, useFonts } from "@expo-google-fonts/comfortaa";
 import {
@@ -37,6 +37,7 @@ export default function App() {
         >
           <Stack.Screen name="Splash" component={SplashPage} />
           <Stack.Screen name="Login" component={LoginPage} />
+          <Stack.Screen name="Hub" component={HubPage} />
         </Stack.Navigator>
       </NavigationContainer>
     );

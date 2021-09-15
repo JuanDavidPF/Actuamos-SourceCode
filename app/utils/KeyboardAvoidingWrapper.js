@@ -1,5 +1,5 @@
 import React from "react";
-import { Keyboard, KeyboardAvoidingView, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform, View } from "react-native";
 import {
   ScrollView,
   TouchableWithoutFeedback,
@@ -7,7 +7,10 @@ import {
 
 export default function KeyboardAvoidingWrapper({ children }) {
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{ flex: 1 }}>{children}</View>
         <TouchableWithoutFeedback

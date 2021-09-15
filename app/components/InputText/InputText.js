@@ -6,10 +6,8 @@ import { InputTextStyles } from "./InputTextStyles";
 
 export default function InputText(props) {
   return (
-    <TextInput
-      style={InputTextStyles.input}
-      placeholder={props.placeholder}
-      secureTextEntry={props.passwordInput}
-    ></TextInput>
+    <TextInput {...props} style={InputTextStyles.input}>
+      {props.children}
+    </TextInput>
   );
 }

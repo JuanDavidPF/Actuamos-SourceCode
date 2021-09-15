@@ -1,5 +1,5 @@
 //React - Expo dependencies
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 
 import InputText from "../../components/InputText/InputText";
@@ -7,12 +7,34 @@ import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import { AppColors } from "../../config/AppColors";
 import { LoginInputsStyles } from "./LoginInputsStyle";
 
-export default function LoginInputs() {
+export default function LoginInputs(props) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <View style={LoginInputsStyles.container}>
-      <InputText placeholder={"Usuario"} />
-      <InputText passwordInput={true} placeholder={"Contraseña"} />
-      <SubmitButton title={"Enviar"} color={AppColors.primary}></SubmitButton>
+      {/*UserName input*/}
+      <InputText placeholder={"Usuario"} onChangeText={setUsername}>
+        {username}
+      </InputText>
+
+      {/*Password input*/}
+      <InputText
+        secureTextEntry={true}
+        placeholder={"Contraseña"}
+        onChangeText={setPassword}
+      >
+        {password}
+      </InputText>
+
+      {/*Submit button input*/}
+      <SubmitButton
+        title={"Enviar"}
+        color={AppColors.accent}
+        onPress={() => {
+          props.submit(username, password);
+        }}
+      ></SubmitButton>
     </View>
   );
 }

@@ -10,7 +10,7 @@ export default function SubmitButton(props) {
       style={[SubmitButtonStyles.container, { backgroundColor: props.color }]}
     >
       <TouchableNativeFeedback
-        onPress={Login}
+        onPress={props.onPress}
         background={TouchableNativeFeedback.Ripple(
           LightenDarkenColor(props.color, 50),
           true
@@ -23,5 +23,3 @@ export default function SubmitButton(props) {
     </View>
   );
 }
-
-const Login = () => {};
