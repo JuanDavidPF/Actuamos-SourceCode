@@ -29,12 +29,13 @@ export default function LoginInputs(props) {
 
       {/*Submit button input*/}
       <SubmitButton
-        title={"Enviar"}
         color={AppColors.accent}
         onPress={() => {
           props.submit(username, password);
         }}
-      ></SubmitButton>
+      >
+        Enviar
+      </SubmitButton>
     </View>
   );
 }

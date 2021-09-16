@@ -1,13 +1,20 @@
+//React Imports
+
 import React from "react";
 import { View, Text, Image } from "react-native";
 
+//Firebase Imports
+import firebase from "firebase";
 import { SplashPageStyles } from "./SplashPageStyles";
 
 export default function SplashPage({ navigation }) {
-  //Remove Splash Screen once seen from stack
-  setTimeout(() => {
-    navigation.replace("Login");
-  }, 2000);
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      navigation.replace("Hub");
+    } else {
+      navigation.replace("Login");
+    }
+  });
 
   return (
     <View style={SplashPageStyles.container}>
