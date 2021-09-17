@@ -9,19 +9,14 @@ import { AppColors } from "../../config/AppColors";
 
 //components
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { ProfilePageStyles } from "./ProfilePageStyles";
 
 export default function ProfilePage({ navigation }) {
   return (
-    <View
-      style={{
-        backgroundColor: AppColors.accent,
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={ProfilePageStyles.container}>
       <Text>This is the Profile Page</Text>
       <SubmitButton
+        color={AppColors.accent}
         onPress={() => {
           loggingOut();
         }}

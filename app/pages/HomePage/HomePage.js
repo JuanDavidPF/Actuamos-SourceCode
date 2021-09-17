@@ -2,16 +2,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
+//Styles
+import { HomePageStyles } from "./HomePageStyles";
+
 export default function HomePage({ navigation }) {
   return (
-    <View
-      style={{
-        backgroundColor: "tomato",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={HomePageStyles.container}>
       <Text>This is the Homepage</Text>
     </View>
   );
