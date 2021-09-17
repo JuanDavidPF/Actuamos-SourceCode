@@ -11,7 +11,8 @@ import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 const Stack = createNativeStackNavigator();
 
-//Pages
+// //Pages
+
 import SplashPage from "./app/pages/SplashPage/SplashPage";
 import LoginPage from "./app/pages/LoginPage/LoginPage";
 import HubPage from "./app/pages/HubPage/HubPage";

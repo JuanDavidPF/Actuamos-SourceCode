@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { AppColors } from "../../config/AppColors";
 
 export const BookmarkPageStyles = StyleSheet.create({
   container: {

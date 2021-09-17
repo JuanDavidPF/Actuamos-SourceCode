@@ -3,15 +3,13 @@ import React from "react";
 
 //styles
 import { BottomNavigationBarStyles } from "./BottomNavigationBarStyles";
-
 //navigation
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 //pages
-import BookmarksPage from "../../pages/BookmarksPage/BookmarksPage";
 import HomePage from "../../pages/HomePage/HomePage";
+import BookmarksPage from "../../pages/BookmarksPage/BookmarksPage";
 import ProfilePage from "../../pages/ProfilePage/ProfilePage";
-
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavigationBar({ navigation }) {
