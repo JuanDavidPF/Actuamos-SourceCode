@@ -12,7 +12,7 @@ export const SubmitButtonStyles = StyleSheet.create({
     overflow: "hidden",
   },
   button: {
-    padding: 20,
+    paddingHorizontal: 20,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

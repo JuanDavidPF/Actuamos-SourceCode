@@ -4,6 +4,6 @@ export const AppColors = {
   secondary: "#84B7FB",
   violet: "#383881",
   black: "#000",
-  white: "#fff",
+  white: "#DDE5F8",
   modalBackground: "rgba(255, 255, 255, 0.075)",
 };
