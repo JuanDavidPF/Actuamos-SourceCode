@@ -18,7 +18,12 @@ import LoginPage from "./app/pages/LoginPage/LoginPage";
 import HubPage from "./app/pages/HubPage/HubPage";
 
 //Fonts
-import { Comfortaa_300Light, useFonts } from "@expo-google-fonts/comfortaa";
+import {
+  Comfortaa_300Light,
+  Comfortaa_400Regular,
+  Comfortaa_700Bold,
+  useFonts,
+} from "@expo-google-fonts/comfortaa";
 import {
   Lato_300Light,
   Lato_400Regular,
@@ -33,7 +38,11 @@ export default function App() {
   }
   //fonts initialization
   let [fontsLoaded] = useFonts({
+    //Comfortaa Family---------------------
     Comfortaa_Light: Comfortaa_300Light,
+    Comfortaa_Regular: Comfortaa_400Regular,
+    Comfortaa_Bold: Comfortaa_700Bold,
+    //Lato Family--------------------------
     Lato_Bold: Lato_700Bold,
     Lato_Light: Lato_300Light,
     Lato_Regular: Lato_400Regular,

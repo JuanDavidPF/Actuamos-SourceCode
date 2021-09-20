@@ -14,7 +14,6 @@ import { ProfilePageStyles } from "./ProfilePageStyles";
 export default function ProfilePage({ navigation }) {
   return (
     <View style={ProfilePageStyles.container}>
-      <Text>This is the Profile Page</Text>
       <SubmitButton
         color={AppColors.accent}
         onPress={() => {
