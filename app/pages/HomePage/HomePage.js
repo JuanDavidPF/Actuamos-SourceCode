@@ -1,13 +1,51 @@
 //React - Expo dependencies
 import React, { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import Carousel from "react-native-snap-carousel";
+import PlayListCard from "../../components/PlaylistCard/PlaylistCard";
+import PlaylistCarousel from "../../components/PlaylistCarousel/PlaylistCarousel";
 
 //Styles
 import { HomePageStyles } from "./HomePageStyles";
 
 export default function HomePage({ navigation }) {
   [userName, setUsername] = useState("Apreciad@");
+  [playlist, setPlaylist] = useState([
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+    {
+      title: "Item 1",
+      text: "Text 1",
+    },
+  ]);
+
   return (
     <ScrollView style={HomePageStyles.container}>
       <View style={HomePageStyles.greetingSection}>
@@ -19,7 +57,7 @@ export default function HomePage({ navigation }) {
         </Text>
       </View>
 
-      <View style={HomePageStyles.contentCard}></View>
+      <PlaylistCarousel list={playlist} card={PlayListCard} />
     </ScrollView>
   );
 } //closes HomePage JSX

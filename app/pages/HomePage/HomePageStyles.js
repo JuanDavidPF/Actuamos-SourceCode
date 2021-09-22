@@ -6,12 +6,11 @@ export const HomePageStyles = StyleSheet.create({
   container: {
     backgroundColor: AppColors.primary,
     paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0,
-    paddingHorizontal: "10%",
-    flex: 1,
   },
 
   greetingSection: {
-    marginTop: 50,
+    marginTop: 65,
+    paddingHorizontal: "10%",
   },
   greetingTitle: {
     fontFamily: Fonts.Comfortaa.Regular,
@@ -29,11 +28,5 @@ export const HomePageStyles = StyleSheet.create({
     color: AppColors.white,
     marginTop: 25,
     width: 260,
-  },
-
-  contentCard: {
-    backgroundColor: AppColors.modalBackground,
-    borderRadius: 20,
-    height: 20000,
   },
 });
