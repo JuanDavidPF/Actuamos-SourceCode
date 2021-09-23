@@ -4,7 +4,7 @@ import { Fonts, FontsSizes } from "../../config/AppFonts";
 
 export const PlaylistCardStyles = StyleSheet.create({
   container: {
-    backgroundColor: AppColors.violet,
+    backgroundColor: AppColors.modalBackground,
     width: "100%",
     borderRadius: 20,
     alignItems: "center",

@@ -1,6 +1,7 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { ActivityIndicator, Dimensions, View } from "react-native";
 import Carousel from "react-native-snap-carousel";
+import { AppColors } from "../../config/AppColors";
 
 const Screen = Dimensions.get("window");
 export default function PlaylistCarousel(props) {
@@ -8,18 +9,21 @@ export default function PlaylistCarousel(props) {
     <View
       style={{
         marginTop: 50,
-        alignItems: "center",
       }}
     >
-      <Carousel
-        enableMomentum={true}
-        decelerationRate={"normal"}
-        layout={"default"}
-        sliderWidth={Screen.width}
-        itemWidth={245}
-        renderItem={props.card || (() => {})}
-        data={props.list || []}
-      ></Carousel>
+      {props.list ? (
+        <Carousel
+          enableMomentum={false}
+          decelerationRate={"fast"}
+          layout={"default"}
+          sliderWidth={Screen.width}
+          itemWidth={Screen.width * 0.65}
+          renderItem={props.card || (() => {})}
+          data={props.list || []}
+        ></Carousel>
+      ) : (
+        <ActivityIndicator size="large" color={AppColors.accent} />
+      )}
     </View>
   );
 }

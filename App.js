@@ -29,8 +29,10 @@ import {
   Lato_400Regular,
   Lato_700Bold,
 } from "@expo-google-fonts/lato";
+import { LogBox } from "react-native";
 
 export default function App() {
+  LogBox.ignoreLogs(["Setting a timer"]);
   //firebase initialization
   if (!firebase.apps.length) {
     console.log("Connected with Firebase");
