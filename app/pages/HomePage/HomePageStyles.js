@@ -4,8 +4,9 @@ import { Fonts, FontsSizes } from "../../config/AppFonts";
 
 export const HomePageStyles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: AppColors.primary,
-    paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0,
+    paddingTop: StatusBar.currentHeight,
   },
 
   greetingSection: {

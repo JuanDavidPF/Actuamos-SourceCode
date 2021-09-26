@@ -11,7 +11,7 @@ export const BottomNavigationBarStyles = StyleSheet.create({
     borderRadius: 35,
     height: 70,
     width: "80%",
-    marginBottom: 40,
+    marginBottom: 27,
     backgroundColor: AppColors.violet,
     borderTopWidth: 0,
     elevation: 0, // remove shadow on Android

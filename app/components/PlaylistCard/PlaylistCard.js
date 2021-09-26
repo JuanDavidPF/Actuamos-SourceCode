@@ -12,18 +12,20 @@ export default function PlayListCard(props) {
       style={{ borderRadius: 20 }}
       activeOpacity={1}
       underlayColor={AppColors.violet}
-      onPress={() => props.onPress(props.title)}
+      onPress={() => props.onPress(props.data, props.index)}
     >
       <View style={PlaylistCardStyles.container}>
         <Image
           style={PlaylistCardStyles.cardImage}
           source={
-            props.image || require("../../assets/images/icons/splash.png")
+            props.data.thumbnail
+              ? { uri: props.data.thumbnail }
+              : require("../../assets/images/icons/splash.png")
           }
         ></Image>
 
         <Text style={PlaylistCardStyles.cardTitle}>
-          {props.title || '"Lorem Ipsum"'}
+          {props.data.title || '"Lorem Ipsum"'}
         </Text>
       </View>
     </TouchableHighlight>
