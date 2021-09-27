@@ -2,7 +2,7 @@
 import { StyleSheet } from "react-native";
 import { AppColors } from "../../config/AppColors";
 
-export const BottomNavigationBarStyles = StyleSheet.create({
+export const HubPageStyles = StyleSheet.create({
   container: {
     position: "absolute",
     paddingHorizontal: 0,
@@ -17,8 +17,4 @@ export const BottomNavigationBarStyles = StyleSheet.create({
     elevation: 0, // remove shadow on Android
     shadowOpacity: 0, // remove shadow on iOS
   },
-  tabIcon: {
-    width: 49,
-    height: 53,
-  },
-}); //closes BottomNavigationBarStyles method
+}); //closes HubPageStyles method

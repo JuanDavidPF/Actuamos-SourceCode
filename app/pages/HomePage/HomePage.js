@@ -16,22 +16,31 @@ const Stack = createNativeStackNavigator();
 
 //Styles
 import { HomePageStyles } from "./HomePageStyles";
+import { TabNavbarContext } from "../../utils/Contexts/TabNavbarContext";
 export default function HomePage({ navigation }) {
   return (
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{ headerShown: false }}
+    <TabNavbarContext.Provider
+      value={{
+        tabBarNavigate: (route, props) => navigation.navigate(route, props),
+      }}
     >
-      <Stack.Screen name="Home" component={PlaylistSelectionPage} />
-      <Stack.Screen name="Playlist" component={PlayListPage} />
-    </Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="Home" component={PlaylistSelectionPage} />
+        <Stack.Screen name="Playlist" component={PlayListPage} />
+      </Stack.Navigator>
+    </TabNavbarContext.Provider>
   );
 } //closes HomePage JSX
 
 const PlaylistSelectionPage = ({ navigation }) => {
   const handleCardSelection = (item, index) => {
     setCurrentCard(index);
-    navigation.navigate("Playlist", { playlist: item });
+    navigation.navigate("Playlist", {
+      playlist: item,
+    });
   };
 
   [userName, setUsername] = useState("Apreciad@");

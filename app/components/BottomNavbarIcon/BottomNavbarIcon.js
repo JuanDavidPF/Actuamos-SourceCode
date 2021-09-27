@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Image } from "react-native";
+
 import { BottomNavbarIconStyles } from "./BottomNavbarIconStyles";
 
 const navbarIconsPath = "../../assets/images/icons/navbar/";
@@ -10,6 +11,8 @@ const iconLibrary = {
   home: require(navbarIconsPath + "home.png"),
   bookmark: require(navbarIconsPath + "bookmark.png"),
   profile: require(navbarIconsPath + "profile.png"),
+  undefined: require(navbarIconsPath + "undefined.png"),
+  undefinedFocused: require(navbarIconsPath + "undefinedFocused.png"),
 };
 
 export default function BottomNavbarIcon(props) {

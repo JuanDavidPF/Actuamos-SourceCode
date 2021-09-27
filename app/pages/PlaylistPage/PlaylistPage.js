@@ -77,7 +77,11 @@ export default function PlayListPage({ navigation, route }) {
         {content.length > 0 ? (
           <MainPlaylist playlist={content} />
         ) : (
-          <ActivityIndicator size={"large"} color={AppColors.accent} />
+          <ActivityIndicator
+            style={{ marginTop: 100 }}
+            size={"large"}
+            color={AppColors.accent}
+          />
         )}
       </View>
     </View>

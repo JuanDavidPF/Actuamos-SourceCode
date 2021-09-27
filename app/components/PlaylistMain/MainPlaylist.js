@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Image, Text, View } from "react-native";
 import { FlatList, TouchableHighlight } from "react-native-gesture-handler";
 import { AppColors } from "../../config/AppColors";
+import { TabNavbarContext } from "../../utils/Contexts/TabNavbarContext";
 import { MainPlaylistStyles } from "./MainPlaylistStyles";
 
 const iconPath = "../../assets/images/icons/";
@@ -11,6 +12,43 @@ const iconLibrary = {
 };
 
 export default function MainPlaylist({ playlist }) {
+  const { tabBarNavigate } = useContext(TabNavbarContext);
+
+  const renderItem = ({ item }) => (
+    <TouchableHighlight
+      style={MainPlaylistStyles.cardContainer}
+      underlayColor={AppColors.secondary}
+      onPress={() => tabBarNavigate("Reproductor", {})}
+    >
+      <View style={MainPlaylistStyles.card}>
+        <Image
+          source={
+            item.thumbnail
+              ? { uri: item.thumbnail }
+              : require("../../assets/images/icons/navbar/undefined.png")
+          }
+          style={MainPlaylistStyles.cardThumbnail}
+        />
+        <View style={MainPlaylistStyles.info}>
+          <Text style={MainPlaylistStyles.title}>
+            {item.title ? item.title : "Sin titulo"}
+          </Text>
+          <Text style={MainPlaylistStyles.duration}>
+            {item.duration ? item.duration : "0:00"}
+          </Text>
+        </View>
+        <Image
+          style={MainPlaylistStyles.fileTypeIcon}
+          source={
+            item.link
+              ? getFileIcon(item.link)
+              : require("../../assets/images/icons/navbar/undefined.png")
+          }
+        />
+      </View>
+    </TouchableHighlight>
+  );
+
   return (
     <FlatList
       style={{ flex: 1 }}
@@ -26,37 +64,3 @@ export default function MainPlaylist({ playlist }) {
 const getFileIcon = (fileLink) => {
   return fileLink.includes(".mp3") ? iconLibrary.audio : iconLibrary.video;
 };
-const renderItem = ({ item }) => (
-  <TouchableHighlight
-    style={MainPlaylistStyles.cardContainer}
-    underlayColor={AppColors.secondary}
-    onPress={() => {}}
-  >
-    <View style={MainPlaylistStyles.card}>
-      <Image
-        source={
-          item.thumbnail
-            ? { uri: item.thumbnail }
-            : require("../../assets/images/icons/navbar/undefined.png")
-        }
-        style={MainPlaylistStyles.cardThumbnail}
-      />
-      <View style={MainPlaylistStyles.info}>
-        <Text style={MainPlaylistStyles.title}>
-          {item.title ? item.title : "Sin titulo"}
-        </Text>
-        <Text style={MainPlaylistStyles.duration}>
-          {item.duration ? item.duration : "0:00"}
-        </Text>
-      </View>
-      <Image
-        style={MainPlaylistStyles.fileTypeIcon}
-        source={
-          item.link
-            ? getFileIcon(item.link)
-            : require("../../assets/images/icons/navbar/undefined.png")
-        }
-      />
-    </View>
-  </TouchableHighlight>
-);
