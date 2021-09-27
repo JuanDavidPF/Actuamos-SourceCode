@@ -1,3 +1,5 @@
+//React Imports
+
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -6,23 +8,49 @@ import {
   Text,
   View,
 } from "react-native";
-import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
-import MainPlaylist from "../../components/PlaylistMain/MainPlaylist";
+import { TouchableHighlight } from "react-native-gesture-handler";
+
+//firebase imports
+import firebase from "firebase";
+
+//styles and config
 import { AppColors } from "../../config/AppColors";
 import { PlaylistPageStyles } from "./PlaylistPageStyles";
+
+//components
+import MainPlaylist from "../../components/PlaylistMain/MainPlaylist";
+
 export default function PlayListPage({ navigation, route }) {
-  [content, setContent] = useState([
-    { id: "1", title: "Elemento 1", thumbnail: "asdasd", link: "asdsd" },
-    { id: "2", title: "Elemento 2", thumbnail: "asdasd", link: "asdsd" },
-    { id: "3", title: "Elemento 3", thumbnail: "asdasd", link: "asdsd" },
-    { id: "4", title: "Elemento 3", thumbnail: "asdasd", link: "asdsd" },
-    { id: "5", title: "Elemento 3", thumbnail: "asdasd", link: "asdsd" },
-    { id: "6", title: "Elemento 6", thumbnail: "asdasd", link: "asdsd" },
-    { id: "8", title: "Elemento 6", thumbnail: "asdasd", link: "asdsd" },
-    { id: "9", title: "Elemento 6", thumbnail: "asdasd", link: "asdsd" },
-    { id: "7", title: "Elemento 6", thumbnail: "asdasd", link: "asdsd" },
-  ]);
-  useEffect(() => {}, []);
+  [content, setContent] = useState([]);
+
+  useEffect(() => {
+    try {
+      const db = firebase.firestore();
+      setContent([]);
+      route.params.playlist.content.forEach((contentDocID) => {
+        db.collection("Content")
+          .doc(contentDocID)
+          .get()
+          .then((doc) => {
+            let contentData = {
+              id: doc.id,
+              title: doc.data().title,
+              thumbnail: doc.data().thumbnail,
+              link: doc.data().link,
+            };
+
+            if (!content.includes(contentData)) {
+              let contentClone = [];
+              contentClone = JSON.parse(JSON.stringify(content));
+              contentClone.push(contentData);
+              setContent(contentClone);
+            }
+          });
+      });
+    } catch (err) {
+      Alert.alert("There is something wrong!", err.message);
+    }
+  }, []);
   return (
     <View style={PlaylistPageStyles.container}>
       <ImageBackground
@@ -46,7 +74,7 @@ export default function PlayListPage({ navigation, route }) {
       </Text>
 
       <View style={{ flex: 1 }}>
-        {content ? (
+        {content.length > 0 ? (
           <MainPlaylist playlist={content} />
         ) : (
           <ActivityIndicator size={"large"} color={AppColors.accent} />

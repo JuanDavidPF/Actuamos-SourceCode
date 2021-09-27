@@ -1,7 +1,14 @@
 import React from "react";
-import { Text, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { Image, Text, View } from "react-native";
+import { FlatList, TouchableHighlight } from "react-native-gesture-handler";
+import { AppColors } from "../../config/AppColors";
 import { MainPlaylistStyles } from "./MainPlaylistStyles";
+
+const iconPath = "../../assets/images/icons/";
+const iconLibrary = {
+  video: require(iconPath + "videoType.png"),
+  audio: require(iconPath + "audioType.png"),
+};
 
 export default function MainPlaylist({ playlist }) {
   return (
@@ -16,9 +23,40 @@ export default function MainPlaylist({ playlist }) {
     />
   );
 }
-
+const getFileIcon = (fileLink) => {
+  return fileLink.includes(".mp3") ? iconLibrary.audio : iconLibrary.video;
+};
 const renderItem = ({ item }) => (
-  <View style={MainPlaylistStyles.playlistCard}>
-    <Text>{item.title}</Text>
-  </View>
+  <TouchableHighlight
+    style={MainPlaylistStyles.cardContainer}
+    underlayColor={AppColors.secondary}
+    onPress={() => {}}
+  >
+    <View style={MainPlaylistStyles.card}>
+      <Image
+        source={
+          item.thumbnail
+            ? { uri: item.thumbnail }
+            : require("../../assets/images/icons/navbar/undefined.png")
+        }
+        style={MainPlaylistStyles.cardThumbnail}
+      />
+      <View style={MainPlaylistStyles.info}>
+        <Text style={MainPlaylistStyles.title}>
+          {item.title ? item.title : "Sin titulo"}
+        </Text>
+        <Text style={MainPlaylistStyles.duration}>
+          {item.duration ? item.duration : "0:00"}
+        </Text>
+      </View>
+      <Image
+        style={MainPlaylistStyles.fileTypeIcon}
+        source={
+          item.link
+            ? getFileIcon(item.link)
+            : require("../../assets/images/icons/navbar/undefined.png")
+        }
+      />
+    </View>
+  </TouchableHighlight>
 );
