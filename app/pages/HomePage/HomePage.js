@@ -1,13 +1,13 @@
 //React - Expo dependencies
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 
 //firebase
 import firebase from "firebase";
 
-import PlayListCard from "../../components/PlaylistCard/PlaylistCard";
 import PlaylistCarousel from "../../components/PlaylistCarousel/PlaylistCarousel";
 import PlayListPage from "../PlaylistPage/PlaylistPage";
 
@@ -21,7 +21,7 @@ export default function HomePage({ navigation }) {
   return (
     <TabNavbarContext.Provider
       value={{
-        tabBarNavigate: (route, props) => navigation.navigate(route, props),
+        bottomTabNavBarNavigation: navigation,
       }}
     >
       <Stack.Navigator
@@ -73,7 +73,7 @@ const PlaylistSelectionPage = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={HomePageStyles.container}>
+    <SafeAreaView style={HomePageStyles.container}>
       <View style={HomePageStyles.greetingSection}>
         <Text style={HomePageStyles.greetingTitle}>¡Hola!</Text>
         <Text style={HomePageStyles.greetingName}>{userName}</Text>
@@ -87,6 +87,6 @@ const PlaylistSelectionPage = ({ navigation }) => {
         onCardSelected={handleCardSelection}
         currentCard={currentCard}
       />
-    </View>
+    </SafeAreaView>
   );
 };

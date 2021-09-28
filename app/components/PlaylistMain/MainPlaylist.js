@@ -12,13 +12,15 @@ const iconLibrary = {
 };
 
 export default function MainPlaylist({ playlist }) {
-  const { tabBarNavigate } = useContext(TabNavbarContext);
+  const { bottomTabNavBarNavigation } = useContext(TabNavbarContext);
 
   const renderItem = ({ item }) => (
     <TouchableHighlight
       style={MainPlaylistStyles.cardContainer}
       underlayColor={AppColors.secondary}
-      onPress={() => tabBarNavigate("Reproductor", {})}
+      onPress={() =>
+        bottomTabNavBarNavigation.navigate("Reproductor", { content: item })
+      }
     >
       <View style={MainPlaylistStyles.card}>
         <Image

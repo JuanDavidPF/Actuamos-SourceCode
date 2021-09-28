@@ -6,7 +6,6 @@ export const HomePageStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: AppColors.primary,
-    paddingTop: StatusBar.currentHeight,
   },
 
   greetingSection: {
