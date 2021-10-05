@@ -29,6 +29,8 @@ import {
   Lato_400Regular,
   Lato_700Bold,
 } from "@expo-google-fonts/lato";
+import { Poppins_400Regular } from "@expo-google-fonts/poppins";
+
 import { LogBox } from "react-native";
 
 export default function App() {
@@ -48,6 +50,8 @@ export default function App() {
     Lato_Bold: Lato_700Bold,
     Lato_Light: Lato_300Light,
     Lato_Regular: Lato_400Regular,
+    //Poppins Family--------------------------
+    Poppins_Regular: Poppins_400Regular,
   });
 
   if (!fontsLoaded) return <AppLoading />;

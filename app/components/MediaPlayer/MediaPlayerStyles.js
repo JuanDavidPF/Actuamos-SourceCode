@@ -6,7 +6,6 @@ export const MediaPlayerStyles = StyleSheet.create({
   container: {
     backgroundColor: AppColors.primary,
     paddingHorizontal: 30,
-
     paddingBottom: 100,
     flex: 1,
   },
@@ -18,18 +17,45 @@ export const MediaPlayerStyles = StyleSheet.create({
   },
   information: {
     marginTop: 20,
-    marginBottom: 40,
   },
 
   title: {
+    height: 55,
+    width: "65%",
     fontSize: FontsSizes.subtitle,
     fontFamily: Fonts.Comfortaa.Bold,
     color: AppColors.white,
   },
 
   controls: {
+    paddingTop: 20,
     flex: 3,
-
     marginBottom: 15,
   },
+  contentProgress: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  progressCounter: {
+    fontFamily: Fonts.Poppins.Regular,
+    fontSize: FontsSizes.subtitle,
+    color: AppColors.white,
+  },
+  progressControls: {
+    flexDirection: "row",
+    alignSelf: "center",
+    flex: 1,
+    width: "60%",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  switchTrackIcon: { width: 20, resizeMode: "contain" },
+  playTrackBtn: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+  },
+  playTrackIcon: { resizeMode: "contain", width: "100%" },
 });

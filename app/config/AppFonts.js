@@ -1,5 +1,4 @@
 /*https://directory.vercel.app/*/
-import { Comfortaa_300Light } from "@expo-google-fonts/comfortaa";
 
 export const FontsSizes = {
   title: 25,
@@ -17,5 +16,8 @@ export const Fonts = {
     Bold: "Lato_Bold",
     Light: "Lato_Light",
     Regular: "Lato_Regular",
+  },
+  Poppins: {
+    Regular: "Poppins_Regular",
   },
 };
