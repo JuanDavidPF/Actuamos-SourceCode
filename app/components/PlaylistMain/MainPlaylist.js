@@ -14,42 +14,45 @@ const iconLibrary = {
 export default function MainPlaylist({ playlist }) {
   const { bottomTabNavBarNavigation } = useContext(TabNavbarContext);
 
-  const renderItem = ({ item }) => (
-    <TouchableHighlight
-      style={MainPlaylistStyles.cardContainer}
-      underlayColor={AppColors.secondary}
-      onPress={() =>
-        bottomTabNavBarNavigation.navigate("Reproductor", { content: item })
-      }
-    >
-      <View style={MainPlaylistStyles.card}>
-        <Image
-          source={
-            item.thumbnail
-              ? { uri: item.thumbnail }
-              : require("../../assets/images/icons/navbar/undefined.png")
-          }
-          style={MainPlaylistStyles.cardThumbnail}
-        />
-        <View style={MainPlaylistStyles.info}>
-          <Text style={MainPlaylistStyles.title}>
-            {item.title ? item.title : "Sin titulo"}
-          </Text>
-          <Text style={MainPlaylistStyles.duration}>
-            {item.duration ? item.duration : "0:00"}
-          </Text>
+  const renderItem = ({ item }) =>
+    item.link ? (
+      <TouchableHighlight
+        style={MainPlaylistStyles.cardContainer}
+        underlayColor={AppColors.secondary}
+        onPress={() =>
+          bottomTabNavBarNavigation.navigate("Reproductor", { content: item })
+        }
+      >
+        <View style={MainPlaylistStyles.card}>
+          <Image
+            source={
+              item.thumbnail
+                ? { uri: item.thumbnail }
+                : require("../../assets/images/icons/navbar/undefined.png")
+            }
+            style={MainPlaylistStyles.cardThumbnail}
+          />
+          <View style={MainPlaylistStyles.info}>
+            <Text style={MainPlaylistStyles.title}>
+              {item.title ? item.title : "Sin titulo"}
+            </Text>
+            <Text style={MainPlaylistStyles.duration}>
+              {item.duration ? item.duration : "0:00"}
+            </Text>
+          </View>
+          <Image
+            style={MainPlaylistStyles.fileTypeIcon}
+            source={
+              item.link
+                ? getFileIcon(item.link)
+                : require("../../assets/images/icons/navbar/undefined.png")
+            }
+          />
         </View>
-        <Image
-          style={MainPlaylistStyles.fileTypeIcon}
-          source={
-            item.link
-              ? getFileIcon(item.link)
-              : require("../../assets/images/icons/navbar/undefined.png")
-          }
-        />
-      </View>
-    </TouchableHighlight>
-  );
+      </TouchableHighlight>
+    ) : (
+      <View></View>
+    );
 
   return (
     <FlatList
