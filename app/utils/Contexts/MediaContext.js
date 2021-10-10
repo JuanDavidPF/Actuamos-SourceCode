@@ -5,4 +5,5 @@ export const MediaContext = createContext({
     setter: null,
   },
   playlist: { value: null, setter: null },
+  playlistArray: { value: [], setter: null },
 });

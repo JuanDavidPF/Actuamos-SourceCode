@@ -12,9 +12,9 @@ const iconLibrary = {
   audio: require(iconPath + "audioType.png"),
 };
 
-export default function MainPlaylist({ playlist }) {
+export default function MainPlaylist() {
   const navigation = useNavigation();
-  const { content } = useContext(MediaContext);
+  const { content, playlistArray } = useContext(MediaContext);
 
   const cardSelected = (item) => {
     content.setter(item);
@@ -64,8 +64,8 @@ export default function MainPlaylist({ playlist }) {
     <FlatList
       style={{ flex: 1 }}
       contentContainerStyle={MainPlaylistStyles.container}
-      data={playlist}
       keyExtractor={(item) => item.id}
+      data={playlistArray.value}
       renderItem={renderItem}
       ListFooterComponent={<View></View>}
       ListFooterComponentStyle={MainPlaylistStyles.flatListFooter}

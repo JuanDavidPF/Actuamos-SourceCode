@@ -57,14 +57,19 @@ export default function App() {
 
   const [content, setContent] = useState();
   const [playlist, setPlaylist] = useState();
+  const [playlistArray, setPlaylistArray] = useState([]);
 
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
       <MediaContext.Provider
         value={{
-          content: { value: content, setter: setContent },
+          content: {
+            value: content,
+            setter: setContent,
+          },
           playlist: { value: playlist, setter: setPlaylist },
+          playlistArray: { value: playlistArray, setter: setPlaylistArray },
         }}
       >
         <NavigationContainer>

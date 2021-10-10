@@ -1,6 +1,6 @@
 //React Imports
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -19,43 +19,16 @@ import { PlaylistPageStyles } from "./PlaylistPageStyles";
 
 //components
 import MainPlaylist from "../../components/PlaylistMain/MainPlaylist";
+import { MediaContext } from "../../utils/Contexts/MediaContext";
 
-export default function PlayListPage({ navigation, route }) {
-  [content, setContent] = useState([]);
+export default function PlayListPage({ navigation }) {
+  const { playlist, playlistArray } = useContext(MediaContext);
 
-  useEffect(() => {
-    try {
-      const db = firebase.firestore();
-      setContent([]);
-      route.params.playlist.content.forEach((contentDocID) => {
-        db.collection("Content")
-          .doc(contentDocID)
-          .get()
-          .then((doc) => {
-            let contentData = {
-              id: doc.id,
-              title: doc.data().title,
-              thumbnail: doc.data().thumbnail,
-              link: doc.data().link,
-            };
-
-            if (!content.includes(contentData)) {
-              let contentClone = [];
-              contentClone = JSON.parse(JSON.stringify(content));
-              contentClone.push(contentData);
-              setContent(contentClone);
-            }
-          });
-      });
-    } catch (err) {
-      Alert.alert("There is something wrong!", err.message);
-    }
-  }, []);
   return (
     <View style={PlaylistPageStyles.container}>
       <ImageBackground
         style={PlaylistPageStyles.playlistCover}
-        source={{ uri: route.params.playlist.thumbnail }}
+        source={{ uri: playlist.value.thumbnail }}
       >
         <TouchableHighlight
           activeOpacity={1}
@@ -70,12 +43,12 @@ export default function PlayListPage({ navigation, route }) {
         </TouchableHighlight>
       </ImageBackground>
       <Text style={PlaylistPageStyles.playlistTitle}>
-        {route.params.playlist.title}
+        {playlist.value.title}
       </Text>
 
       <View style={{ flex: 1 }}>
-        {content.length > 0 ? (
-          <MainPlaylist playlist={content} />
+        {playlistArray.value.length > 0 ? (
+          <MainPlaylist />
         ) : (
           <ActivityIndicator
             style={{ marginTop: 100 }}

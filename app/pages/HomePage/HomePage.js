@@ -1,6 +1,6 @@
 //React - Expo dependencies
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
@@ -16,6 +16,7 @@ const Stack = createNativeStackNavigator();
 
 //Styles
 import { HomePageStyles } from "./HomePageStyles";
+import { MediaContext } from "../../utils/Contexts/MediaContext";
 
 export default function HomePage({ navigation }) {
   return (
@@ -30,16 +31,49 @@ export default function HomePage({ navigation }) {
 } //closes HomePage JSX
 
 const PlaylistSelectionPage = ({ navigation }) => {
+  const { playlist, playlistArray } = useContext(MediaContext);
+
+  useEffect(() => {
+    if (playlist.value) {
+      try {
+        playlistArray.setter([]);
+        let contentFetched = [];
+        const db = firebase.firestore();
+
+        playlist.value.content.forEach((contentDocID) => {
+          db.collection("Content")
+            .doc(contentDocID)
+            .get()
+            .then((doc) => {
+              let contentData = {
+                id: doc.id,
+                title: doc.data().title,
+                thumbnail: doc.data().thumbnail,
+                link: doc.data().link,
+              };
+
+              if (!contentFetched.includes(contentData)) {
+                contentFetched.push(contentData);
+              }
+              playlistArray.setter(contentFetched);
+            });
+        });
+      } catch (err) {
+        Alert.alert("There is something wrong!", err.message);
+      }
+    }
+  }, [playlist.value]);
+
   const handleCardSelection = (item, index) => {
     setCurrentCard(index);
-    navigation.navigate("Playlist", {
-      playlist: item,
-    });
+    playlist.setter(item);
+
+    navigation.navigate("Playlist");
   };
 
-  [userName, setUsername] = useState("Apreciad@");
-  [playlists, setPlaylists] = useState();
-  [currentCard, setCurrentCard] = useState(0);
+  const [userName, setUsername] = useState("Apreciad@");
+  const [playlists, setPlaylists] = useState();
+  const [currentCard, setCurrentCard] = useState(0);
 
   React.useEffect(() => {
     try {
@@ -50,7 +84,7 @@ const PlaylistSelectionPage = ({ navigation }) => {
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            playlist = {
+            let playlist = {
               id: doc.id,
               title: doc.data().title,
               thumbnail: doc.data().thumbnail,
