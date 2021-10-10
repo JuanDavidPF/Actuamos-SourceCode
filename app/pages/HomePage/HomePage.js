@@ -16,22 +16,16 @@ const Stack = createNativeStackNavigator();
 
 //Styles
 import { HomePageStyles } from "./HomePageStyles";
-import { TabNavbarContext } from "../../utils/Contexts/TabNavbarContext";
+
 export default function HomePage({ navigation }) {
   return (
-    <TabNavbarContext.Provider
-      value={{
-        bottomTabNavBarNavigation: navigation,
-      }}
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{ headerShown: false }}
     >
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Home" component={PlaylistSelectionPage} />
-        <Stack.Screen name="Playlist" component={PlayListPage} />
-      </Stack.Navigator>
-    </TabNavbarContext.Provider>
+      <Stack.Screen name="Home" component={PlaylistSelectionPage} />
+      <Stack.Screen name="Playlist" component={PlayListPage} />
+    </Stack.Navigator>
   );
 } //closes HomePage JSX
 

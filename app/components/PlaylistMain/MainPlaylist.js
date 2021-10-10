@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import { useNavigation } from "@react-navigation/core";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { FlatList, TouchableHighlight } from "react-native-gesture-handler";
 import { AppColors } from "../../config/AppColors";
-import { TabNavbarContext } from "../../utils/Contexts/TabNavbarContext";
+import { MediaContext } from "../../utils/Contexts/MediaContext";
 import { MainPlaylistStyles } from "./MainPlaylistStyles";
 
 const iconPath = "../../assets/images/icons/";
@@ -12,16 +13,21 @@ const iconLibrary = {
 };
 
 export default function MainPlaylist({ playlist }) {
-  const { bottomTabNavBarNavigation } = useContext(TabNavbarContext);
+  const navigation = useNavigation();
+  const { content } = useContext(MediaContext);
+
+  const cardSelected = (item) => {
+    content.setter(item);
+
+    navigation.navigate("Reproductor");
+  };
 
   const renderItem = ({ item }) =>
     item.link ? (
       <TouchableHighlight
         style={MainPlaylistStyles.cardContainer}
         underlayColor={AppColors.secondary}
-        onPress={() =>
-          bottomTabNavBarNavigation.navigate("Reproductor", { content: item })
-        }
+        onPress={() => cardSelected(item)}
       >
         <View style={MainPlaylistStyles.card}>
           <Image

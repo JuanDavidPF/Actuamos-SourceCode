@@ -1,5 +1,5 @@
 //React - Expo dependencies
-import React from "react";
+import React, { useState } from "react";
 import AppLoading from "expo-app-loading";
 
 //Firebase
@@ -32,6 +32,7 @@ import {
 import { Poppins_400Regular } from "@expo-google-fonts/poppins";
 
 import { LogBox } from "react-native";
+import { MediaContext } from "./app/utils/Contexts/MediaContext";
 
 export default function App() {
   LogBox.ignoreLogs(["Setting a timer"]);
@@ -54,18 +55,28 @@ export default function App() {
     Poppins_Regular: Poppins_400Regular,
   });
 
+  const [content, setContent] = useState();
+  const [playlist, setPlaylist] = useState();
+
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Hub"
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name="Splash" component={SplashPage} />
-          <Stack.Screen name="Login" component={LoginPage} />
-          <Stack.Screen name="Hub" component={HubPage} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <MediaContext.Provider
+        value={{
+          content: { value: content, setter: setContent },
+          playlist: { value: playlist, setter: setPlaylist },
+        }}
+      >
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Hub"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Splash" component={SplashPage} />
+            <Stack.Screen name="Login" component={LoginPage} />
+            <Stack.Screen name="Hub" component={HubPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </MediaContext.Provider>
     );
 }

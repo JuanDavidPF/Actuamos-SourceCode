@@ -13,7 +13,6 @@ import MediaPlayer from "../../components/MediaPlayer/MediaPlayer";
 import { AppColors } from "../../config/AppColors";
 import BottomNavbarIcon from "../../components/BottomNavbarIcon/BottomNavbarIcon";
 import { HubPageStyles } from "./HubPageStyles";
-import { TabNavbarContext } from "../../utils/Contexts/TabNavbarContext";
 
 export default function HubPage({ navigation }) {
   return (

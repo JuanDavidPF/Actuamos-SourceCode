@@ -1,7 +1,7 @@
 //react imports
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import {
   TouchableHighlight,
@@ -10,26 +10,24 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppColors } from "../../config/AppColors";
+import { MediaContext } from "../../utils/Contexts/MediaContext";
+import { GetFileType } from "../../utils/GetFileType";
 import { SecondsToHMS } from "../../utils/TimeConvertions";
 
 //styles
 import { MediaPlayerStyles } from "./MediaPlayerStyles";
 
-export default function MediaPlayer({ route }) {
-  //icon
-  const icons = {
-    previousTrack: require("../../assets/images/icons/contentPlayer/previousTrack.png"),
-    nextTrack: require("../../assets/images/icons/contentPlayer/nextTrack.png"),
-    playButton: require("../../assets/images/icons/contentPlayer/playTrack.png"),
-    pauseButton: require("../../assets/images/icons/contentPlayer/pauseTrack.png"),
-  };
+//icons
+const icons = {
+  previousTrack: require("../../assets/images/icons/contentPlayer/previousTrack.png"),
+  nextTrack: require("../../assets/images/icons/contentPlayer/nextTrack.png"),
+  playButton: require("../../assets/images/icons/contentPlayer/playTrack.png"),
+  pauseButton: require("../../assets/images/icons/contentPlayer/pauseTrack.png"),
+};
 
-  const GetFileType = () => {
-    if (content.link.includes(".mp3")) return "audio";
-    else if (content.link.includes(".mp4")) return "video";
-  };
+export default function MediaPlayer() {
+  const { content } = useContext(MediaContext);
 
-  const content = route.params.content;
   const [contentProgress, setContentProgress] = useState(0);
   const [contentDuration, setContentDuration] = useState(0);
 
@@ -39,7 +37,7 @@ export default function MediaPlayer({ route }) {
   const [Loading, SetLoading] = React.useState(false);
   const [Playing, SetPlaying] = React.useState(false);
 
-  const FileType = GetFileType();
+  const FileType = GetFileType(content.value.link);
   const sound = React.useRef(new Audio.Sound());
 
   useEffect(() => {
@@ -51,7 +49,7 @@ export default function MediaPlayer({ route }) {
       case "video":
         break;
     }
-  }, [content.link]);
+  }, [content.value]);
 
   const UnloadAudio = async () => {
     await sound.current.unloadAsync();
@@ -76,12 +74,15 @@ export default function MediaPlayer({ route }) {
     SetLoaded(false);
     SetLoading(true);
     SetPlaying(false);
+
+    await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+
     const checkLoading = await sound.current.getStatusAsync();
     if (checkLoading.isLoaded === false) {
       try {
         const result = await sound.current.loadAsync(
-          { uri: content.link },
-          {},
+          { uri: content.value.link },
+          { shouldPlay: true },
           true
         );
         if (result.isLoaded === false) {
@@ -89,7 +90,6 @@ export default function MediaPlayer({ route }) {
           console.log("Error in Loading Audio");
         } else {
           SetLoading(false);
-          PlayAudio();
           SetLoaded(true);
 
           setContentDuration(result.durationMillis / 1000);
@@ -139,10 +139,10 @@ export default function MediaPlayer({ route }) {
       <View style={MediaPlayerStyles.informationSection}>
         <Image
           style={MediaPlayerStyles.cover}
-          source={{ uri: content.thumbnail }}
+          source={{ uri: content.value.thumbnail }}
         />
         <View style={MediaPlayerStyles.information}>
-          <Text style={MediaPlayerStyles.title}>{content.title}</Text>
+          <Text style={MediaPlayerStyles.title}>{content.value.title}</Text>
         </View>
       </View>
       <View style={MediaPlayerStyles.controls}>
