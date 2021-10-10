@@ -26,7 +26,7 @@ const icons = {
 };
 
 export default function MediaPlayer() {
-  const { content } = useContext(MediaContext);
+  const { content, playlistArray } = useContext(MediaContext);
 
   const [contentProgress, setContentProgress] = useState(0);
   const [contentDuration, setContentDuration] = useState(0);
@@ -67,6 +67,7 @@ export default function MediaPlayer() {
 
   const LoadAudio = async () => {
     setContentProgress(0);
+    setContentDuration(0);
     sound.current.setOnPlaybackStatusUpdate((status) => {
       PlaybackUpdate(status);
     });
@@ -134,6 +135,20 @@ export default function MediaPlayer() {
     else PlayAudio();
   };
 
+  const HandleNextTrackButton = () => {
+    let index = playlistArray.value.indexOf(content.value);
+    index + 1 < playlistArray.value.length ? (index += 1) : (index = 0);
+
+    content.setter(playlistArray.value[index]);
+  };
+
+  const HandlePreviousTrackButton = () => {
+    let index = playlistArray.value.indexOf(content.value);
+    index - 1 >= 0 ? (index -= 1) : (index = playlistArray.value.length - 1);
+
+    content.setter(playlistArray.value[index]);
+  };
+
   return (
     <SafeAreaView style={MediaPlayerStyles.container}>
       <View style={MediaPlayerStyles.informationSection}>
@@ -164,7 +179,8 @@ export default function MediaPlayer() {
           thumbTintColor={AppColors.accent}
           minimumTrackTintColor={AppColors.accent}
           maximumTrackTintColor={AppColors.white}
-        ></Slider>
+        />
+
         <View style={MediaPlayerStyles.contentProgress}>
           <Text style={MediaPlayerStyles.progressCounter}>
             {SecondsToHMS(contentProgress)}
@@ -175,12 +191,18 @@ export default function MediaPlayer() {
         </View>
 
         <View style={MediaPlayerStyles.progressControls}>
-          <TouchableWithoutFeedback onPress={() => {}}>
+          <TouchableHighlight
+            underlayColor={AppColors.accent}
+            style={MediaPlayerStyles.skipBtns}
+            onPress={() => {
+              HandlePreviousTrackButton();
+            }}
+          >
             <Image
               style={MediaPlayerStyles.switchTrackIcon}
               source={icons.previousTrack}
             />
-          </TouchableWithoutFeedback>
+          </TouchableHighlight>
           <TouchableHighlight
             style={MediaPlayerStyles.playTrackBtn}
             underlayColor={AppColors.accent}
@@ -193,12 +215,18 @@ export default function MediaPlayer() {
               source={Playing ? icons.pauseButton : icons.playButton}
             />
           </TouchableHighlight>
-          <TouchableWithoutFeedback onPress={() => {}}>
+          <TouchableHighlight
+            underlayColor={AppColors.accent}
+            style={MediaPlayerStyles.skipBtns}
+            onPress={() => {
+              HandleNextTrackButton();
+            }}
+          >
             <Image
               style={MediaPlayerStyles.switchTrackIcon}
               source={icons.nextTrack}
             />
-          </TouchableWithoutFeedback>
+          </TouchableHighlight>
         </View>
       </View>
     </SafeAreaView>

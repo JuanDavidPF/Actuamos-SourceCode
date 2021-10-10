@@ -47,15 +47,7 @@ export default function PlayListPage({ navigation }) {
       </Text>
 
       <View style={{ flex: 1 }}>
-        {playlistArray.value.length > 0 ? (
-          <MainPlaylist />
-        ) : (
-          <ActivityIndicator
-            style={{ marginTop: 100 }}
-            size={"large"}
-            color={AppColors.accent}
-          />
-        )}
+        <MainPlaylist />
       </View>
     </View>
   );

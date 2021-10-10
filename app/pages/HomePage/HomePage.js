@@ -52,7 +52,7 @@ const PlaylistSelectionPage = ({ navigation }) => {
                 link: doc.data().link,
               };
 
-              if (!contentFetched.includes(contentData)) {
+              if (!contentFetched.includes(contentData) && contentData.link) {
                 contentFetched.push(contentData);
               }
               playlistArray.setter(contentFetched);

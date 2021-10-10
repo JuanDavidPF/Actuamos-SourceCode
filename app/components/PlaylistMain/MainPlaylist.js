@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/core";
 import React, { useContext, useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
+import { ActivityIndicator, Image, Text, View } from "react-native";
 import { FlatList, TouchableHighlight } from "react-native-gesture-handler";
 import { AppColors } from "../../config/AppColors";
 import { MediaContext } from "../../utils/Contexts/MediaContext";
@@ -60,7 +60,7 @@ export default function MainPlaylist() {
       <View></View>
     );
 
-  return (
+  return playlistArray.value.length > 0 ? (
     <FlatList
       style={{ flex: 1 }}
       contentContainerStyle={MainPlaylistStyles.container}
@@ -69,6 +69,12 @@ export default function MainPlaylist() {
       renderItem={renderItem}
       ListFooterComponent={<View></View>}
       ListFooterComponentStyle={MainPlaylistStyles.flatListFooter}
+    />
+  ) : (
+    <ActivityIndicator
+      style={{ marginTop: 100 }}
+      size={"large"}
+      color={AppColors.accent}
     />
   );
 }

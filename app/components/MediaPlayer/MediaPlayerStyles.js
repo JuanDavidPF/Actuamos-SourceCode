@@ -45,11 +45,11 @@ export const MediaPlayerStyles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
     flex: 1,
-    width: "60%",
+    width: "65%",
     alignItems: "center",
     justifyContent: "space-around",
   },
-  switchTrackIcon: { width: 20, resizeMode: "contain" },
+
   playTrackBtn: {
     alignItems: "center",
     justifyContent: "center",
@@ -58,4 +58,14 @@ export const MediaPlayerStyles = StyleSheet.create({
     borderRadius: 50,
   },
   playTrackIcon: { resizeMode: "contain", width: "100%" },
+
+  skipBtns: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    borderRadius: 40,
+    width: 40,
+    height: 40,
+  },
+  switchTrackIcon: { width: "100%", resizeMode: "contain" },
 });
