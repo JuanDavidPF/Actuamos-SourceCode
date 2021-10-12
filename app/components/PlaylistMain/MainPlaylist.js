@@ -4,6 +4,7 @@ import { ActivityIndicator, Image, Text, View } from "react-native";
 import { FlatList, TouchableHighlight } from "react-native-gesture-handler";
 import { AppColors } from "../../config/AppColors";
 import { MediaContext } from "../../utils/Contexts/MediaContext";
+import { UserContext } from "../../utils/Contexts/UserContext";
 import { MainPlaylistStyles } from "./MainPlaylistStyles";
 
 const iconPath = "../../assets/images/icons/";

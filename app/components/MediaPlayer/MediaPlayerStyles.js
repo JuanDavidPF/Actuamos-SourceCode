@@ -16,6 +16,9 @@ export const MediaPlayerStyles = StyleSheet.create({
     borderRadius: 20,
   },
   information: {
+    justifyContent: "space-between",
+
+    flexDirection: "row",
     marginTop: 20,
   },
 

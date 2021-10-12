@@ -19,14 +19,20 @@ export default function SplashPage({ navigation }) {
     try {
       const db = firebase.firestore();
 
+      let userState = {
+        authData: firebase.auth().currentUser,
+        userData: {
+          bookmarks: [],
+        },
+      };
+
       db.collection("Users")
-        .doc(firebase.auth().currentUser.email)
+        .doc(firebase.auth().currentUser.uid)
         .get()
         .then((doc) => {
-          let userState = {
-            user: firebase.auth().currentUser,
-            userData: doc.data(),
-          };
+          if (doc.data()) {
+            userState.userData = doc.data();
+          }
           userState = JSON.stringify(userState);
           navigation.replace("Hub", { userInfo: userState });
         });

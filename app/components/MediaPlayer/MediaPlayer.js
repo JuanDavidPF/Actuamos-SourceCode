@@ -8,10 +8,19 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-
 import { SafeAreaView } from "react-native-safe-area-context";
+
+//firebase imports
+import firebase from "firebase";
+
+//config
 import { AppColors } from "../../config/AppColors";
+
+//contexts
 import { MediaContext } from "../../utils/Contexts/MediaContext";
+import { UserContext } from "../../utils/Contexts/UserContext";
+
+//methods
 import { GetFileType } from "../../utils/GetFileType";
 import { SecondsToHMS } from "../../utils/TimeConvertions";
 
@@ -24,12 +33,16 @@ const icons = {
   nextTrack: require("../../assets/images/icons/contentPlayer/nextTrack.png"),
   playButton: require("../../assets/images/icons/contentPlayer/playTrack.png"),
   pauseButton: require("../../assets/images/icons/contentPlayer/pauseTrack.png"),
+  favouriteIcon: require("../../assets/images/icons/navbar/bookmarkFocused.png"),
+  unFavouriteIcon: require("../../assets/images/icons/navbar/bookmark.png"),
 };
 
 export default function MediaPlayer({ route, navigation }) {
   const { index, playlistArray } = route.params;
+  const { userState } = useContext(UserContext);
 
   const [content, setContent] = useState(playlistArray[index]);
+  const [favourite, setFavourite] = useState();
 
   const [contentProgress, setContentProgress] = useState(0);
   const [contentDuration, setContentDuration] = useState(0);
@@ -44,11 +57,38 @@ export default function MediaPlayer({ route, navigation }) {
 
   const sound = React.useRef(new Audio.Sound());
 
+  const CheckIfBookmark = () => {
+    setFavourite(
+      userState.value.userData.bookmarks.find(
+        (element) => element.id == content.id
+      )
+    );
+  };
+
+  useEffect(() => {
+    CheckIfBookmark();
+  }, [userState.value]);
+
+  useEffect(() => {
+    const db = firebase.firestore();
+    let userDataClone = JSON.parse(JSON.stringify(userState.value.userData));
+    let contentIDArray = [];
+    userDataClone.bookmarks.forEach((content) => {
+      contentIDArray.push(content.id);
+    });
+    userDataClone.bookmarks = contentIDArray;
+
+    db.collection("Users")
+      .doc(userState.value.authData.uid)
+      .set(userDataClone, { merge: true });
+  }, [favourite]);
+
   useEffect(() => {
     setContent(playlistArray[index]);
   }, [route.params]);
 
   useEffect(() => {
+    CheckIfBookmark();
     switch (FileType) {
       case "audio":
         LoadAudio();
@@ -158,6 +198,24 @@ export default function MediaPlayer({ route, navigation }) {
     setContent(playlistArray[index]);
   };
 
+  const HandleBookmarkButton = () => {
+    let userClone = JSON.parse(JSON.stringify(userState.value));
+    let bookmarkIndex = userClone.userData.bookmarks.findIndex(
+      (element) => element.id == content.id
+    );
+
+    if (favourite) {
+      if (bookmarkIndex == -1) return;
+
+      userClone.userData.bookmarks.splice(bookmarkIndex, 1);
+      userState.setter(userClone);
+    } else {
+      if (bookmarkIndex > -1) return;
+      userClone.userData.bookmarks.push(content);
+      userState.setter(userClone);
+    }
+  };
+
   return (
     <SafeAreaView style={MediaPlayerStyles.container}>
       <View style={MediaPlayerStyles.informationSection}>
@@ -167,6 +225,16 @@ export default function MediaPlayer({ route, navigation }) {
         />
         <View style={MediaPlayerStyles.information}>
           <Text style={MediaPlayerStyles.title}>{content.title}</Text>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              HandleBookmarkButton();
+            }}
+          >
+            <Image
+              style={{ width: 35, height: 35, resizeMode: "contain" }}
+              source={favourite ? icons.favouriteIcon : icons.unFavouriteIcon}
+            />
+          </TouchableWithoutFeedback>
         </View>
       </View>
       <View style={MediaPlayerStyles.controls}>
