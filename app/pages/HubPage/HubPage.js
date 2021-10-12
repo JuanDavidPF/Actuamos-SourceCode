@@ -1,5 +1,9 @@
 //React - Expo dependencies
-import React from "react";
+import React, { useContext, useEffect } from "react";
+
+//firebase
+import firebase from "firebase";
+
 //navigation
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
@@ -13,8 +17,43 @@ import MediaPlayer from "../../components/MediaPlayer/MediaPlayer";
 import { AppColors } from "../../config/AppColors";
 import BottomNavbarIcon from "../../components/BottomNavbarIcon/BottomNavbarIcon";
 import { HubPageStyles } from "./HubPageStyles";
+import { UserContext } from "../../utils/Contexts/UserContext";
 
-export default function HubPage({ navigation }) {
+export default function HubPage({ navigation, route }) {
+  const { userState } = useContext(UserContext);
+
+  useEffect(() => {
+    let userInfo = JSON.parse(route.params.userInfo);
+    let bookmarksID = JSON.parse(JSON.stringify(userInfo.userData.bookmarks));
+    userInfo.userData.bookmarks = [];
+    userState.setter(userInfo);
+
+    try {
+      const db = firebase.firestore();
+      bookmarksID.forEach((contentID) => {
+        db.collection("Content")
+          .doc(contentID)
+          .get()
+          .then((doc) => {
+            let contentData = {
+              id: doc.id,
+              title: doc.data().title,
+              thumbnail: doc.data().thumbnail,
+              link: doc.data().link,
+            };
+
+            if (!userInfo.userData.bookmarks.includes(contentData)) {
+              userInfo.userData.bookmarks.push(contentData);
+            }
+            userState.setter(userInfo);
+          });
+      });
+    } catch (error) {
+      Alert.alert("There is something wrong!", error.message);
+    }
+    // userState.setter(JSON.parse(route.params.userInfo));
+  }, [route.params.userInfo]);
+
   return (
     <Tab.Navigator
       backBehavior={"initialRoute"}

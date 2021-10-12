@@ -3,7 +3,6 @@ import { AppColors } from "../../config/AppColors";
 import { Fonts, FontsSizes } from "../../config/AppFonts";
 
 export const MainPlaylistStyles = StyleSheet.create({
-  container: { paddingHorizontal: 15, paddingVertical: 15 },
   flatListFooter: { marginBottom: 100 },
   cardContainer: {
     borderRadius: 10,

@@ -33,6 +33,7 @@ import { Poppins_400Regular } from "@expo-google-fonts/poppins";
 
 import { LogBox } from "react-native";
 import { MediaContext } from "./app/utils/Contexts/MediaContext";
+import { UserContext } from "./app/utils/Contexts/UserContext";
 
 export default function App() {
   LogBox.ignoreLogs(["Setting a timer"]);
@@ -58,30 +59,35 @@ export default function App() {
   const [content, setContent] = useState();
   const [playlist, setPlaylist] = useState();
   const [playlistArray, setPlaylistArray] = useState([]);
+  const [userState, setUserState] = useState();
 
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
-      <MediaContext.Provider
-        value={{
-          content: {
-            value: content,
-            setter: setContent,
-          },
-          playlist: { value: playlist, setter: setPlaylist },
-          playlistArray: { value: playlistArray, setter: setPlaylistArray },
-        }}
+      <UserContext.Provider
+        value={{ userState: { value: userState, setter: setUserState } }}
       >
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Hub"
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="Splash" component={SplashPage} />
-            <Stack.Screen name="Login" component={LoginPage} />
-            <Stack.Screen name="Hub" component={HubPage} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </MediaContext.Provider>
+        <MediaContext.Provider
+          value={{
+            content: {
+              value: content,
+              setter: setContent,
+            },
+            playlist: { value: playlist, setter: setPlaylist },
+            playlistArray: { value: playlistArray, setter: setPlaylistArray },
+          }}
+        >
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Splash"
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="Splash" component={SplashPage} />
+              <Stack.Screen name="Login" component={LoginPage} />
+              <Stack.Screen name="Hub" component={HubPage} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </MediaContext.Provider>
+      </UserContext.Provider>
     );
 }

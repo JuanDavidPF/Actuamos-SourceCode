@@ -1,6 +1,7 @@
 //react imports
 import Slider from "@react-native-community/slider";
-import { Audio } from "expo-av";
+import { useRoute } from "@react-navigation/core";
+import { Audio, Video } from "expo-av";
 import React, { useContext, useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import {
@@ -25,8 +26,10 @@ const icons = {
   pauseButton: require("../../assets/images/icons/contentPlayer/pauseTrack.png"),
 };
 
-export default function MediaPlayer() {
-  const { content, playlistArray } = useContext(MediaContext);
+export default function MediaPlayer({ route, navigation }) {
+  const { index, playlistArray } = route.params;
+
+  const [content, setContent] = useState(playlistArray[index]);
 
   const [contentProgress, setContentProgress] = useState(0);
   const [contentDuration, setContentDuration] = useState(0);
@@ -37,8 +40,13 @@ export default function MediaPlayer() {
   const [Loading, SetLoading] = React.useState(false);
   const [Playing, SetPlaying] = React.useState(false);
 
-  const FileType = GetFileType(content.value.link);
+  const FileType = GetFileType(content.link);
+
   const sound = React.useRef(new Audio.Sound());
+
+  useEffect(() => {
+    setContent(playlistArray[index]);
+  }, [route.params]);
 
   useEffect(() => {
     switch (FileType) {
@@ -49,7 +57,7 @@ export default function MediaPlayer() {
       case "video":
         break;
     }
-  }, [content.value]);
+  }, [content]);
 
   const UnloadAudio = async () => {
     await sound.current.unloadAsync();
@@ -66,6 +74,7 @@ export default function MediaPlayer() {
   };
 
   const LoadAudio = async () => {
+    if (Loading) return;
     setContentProgress(0);
     setContentDuration(0);
     sound.current.setOnPlaybackStatusUpdate((status) => {
@@ -82,7 +91,7 @@ export default function MediaPlayer() {
     if (checkLoading.isLoaded === false) {
       try {
         const result = await sound.current.loadAsync(
-          { uri: content.value.link },
+          { uri: content.link },
           { shouldPlay: true },
           true
         );
@@ -136,17 +145,17 @@ export default function MediaPlayer() {
   };
 
   const HandleNextTrackButton = () => {
-    let index = playlistArray.value.indexOf(content.value);
-    index + 1 < playlistArray.value.length ? (index += 1) : (index = 0);
+    let index = playlistArray.indexOf(content);
+    index + 1 < playlistArray.length ? (index += 1) : (index = 0);
 
-    content.setter(playlistArray.value[index]);
+    setContent(playlistArray[index]);
   };
 
   const HandlePreviousTrackButton = () => {
-    let index = playlistArray.value.indexOf(content.value);
-    index - 1 >= 0 ? (index -= 1) : (index = playlistArray.value.length - 1);
+    let index = playlistArray.indexOf(content);
+    index - 1 >= 0 ? (index -= 1) : (index = playlistArray.length - 1);
 
-    content.setter(playlistArray.value[index]);
+    setContent(playlistArray[index]);
   };
 
   return (
@@ -154,10 +163,10 @@ export default function MediaPlayer() {
       <View style={MediaPlayerStyles.informationSection}>
         <Image
           style={MediaPlayerStyles.cover}
-          source={{ uri: content.value.thumbnail }}
+          source={{ uri: content.thumbnail }}
         />
         <View style={MediaPlayerStyles.information}>
-          <Text style={MediaPlayerStyles.title}>{content.value.title}</Text>
+          <Text style={MediaPlayerStyles.title}>{content.title}</Text>
         </View>
       </View>
       <View style={MediaPlayerStyles.controls}>
@@ -165,12 +174,14 @@ export default function MediaPlayer() {
           onValueChange={(value) => {
             setContentProgress(value);
           }}
-          onSlidingStart={(value) => {
+          onTouchStart={() => {
             PauseAudio();
+          }}
+          onTouchEnd={() => {
+            PlayAudio();
           }}
           onSlidingComplete={(value) => {
             sound.current.setPositionAsync(value * 1000);
-            PlayAudio();
           }}
           value={contentProgress}
           minimumValue={0}
@@ -192,8 +203,12 @@ export default function MediaPlayer() {
 
         <View style={MediaPlayerStyles.progressControls}>
           <TouchableHighlight
+            disabled={!(playlistArray.length > 1)}
             underlayColor={AppColors.accent}
-            style={MediaPlayerStyles.skipBtns}
+            style={[
+              MediaPlayerStyles.skipBtns,
+              { opacity: playlistArray.length > 1 ? 1 : 0.4 },
+            ]}
             onPress={() => {
               HandlePreviousTrackButton();
             }}
@@ -216,8 +231,12 @@ export default function MediaPlayer() {
             />
           </TouchableHighlight>
           <TouchableHighlight
+            disabled={playlistArray.length <= 1}
             underlayColor={AppColors.accent}
-            style={MediaPlayerStyles.skipBtns}
+            style={[
+              MediaPlayerStyles.skipBtns,
+              { opacity: playlistArray.length > 1 ? 1 : 0.4 },
+            ]}
             onPress={() => {
               HandleNextTrackButton();
             }}

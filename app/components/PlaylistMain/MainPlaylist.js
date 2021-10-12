@@ -12,14 +12,14 @@ const iconLibrary = {
   audio: require(iconPath + "audioType.png"),
 };
 
-export default function MainPlaylist() {
+export default function MainPlaylist({ contentArray }) {
   const navigation = useNavigation();
-  const { content, playlistArray } = useContext(MediaContext);
 
   const cardSelected = (item) => {
-    content.setter(item);
-
-    navigation.navigate("Reproductor");
+    navigation.navigate("Reproductor", {
+      index: contentArray.indexOf(item),
+      playlistArray: contentArray,
+    });
   };
 
   const renderItem = ({ item }) =>
@@ -60,12 +60,11 @@ export default function MainPlaylist() {
       <View></View>
     );
 
-  return playlistArray.value.length > 0 ? (
+  return contentArray && contentArray.length > 0 ? (
     <FlatList
       style={{ flex: 1 }}
-      contentContainerStyle={MainPlaylistStyles.container}
       keyExtractor={(item) => item.id}
-      data={playlistArray.value}
+      data={contentArray}
       renderItem={renderItem}
       ListFooterComponent={<View></View>}
       ListFooterComponentStyle={MainPlaylistStyles.flatListFooter}

@@ -46,8 +46,8 @@ export default function PlayListPage({ navigation }) {
         {playlist.value.title}
       </Text>
 
-      <View style={{ flex: 1 }}>
-        <MainPlaylist />
+      <View style={{ flex: 1, padding: 15 }}>
+        <MainPlaylist contentArray={playlistArray.value} />
       </View>
     </View>
   );
