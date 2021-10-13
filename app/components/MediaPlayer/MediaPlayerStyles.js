@@ -15,6 +15,13 @@ export const MediaPlayerStyles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
   },
+
+  video: {
+    flex: 1,
+
+    borderRadius: 20,
+    backgroundColor: AppColors.modalBackground,
+  },
   information: {
     justifyContent: "space-between",
 

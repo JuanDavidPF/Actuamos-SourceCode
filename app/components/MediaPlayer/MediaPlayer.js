@@ -55,7 +55,14 @@ export default function MediaPlayer({ route, navigation }) {
 
   const FileType = GetFileType(content.link);
 
+  const video = React.useRef(null);
   const sound = React.useRef(new Audio.Sound());
+  let mediaReference =
+    FileType == "audio"
+      ? sound.current
+      : FileType == "video"
+      ? video.current
+      : null;
 
   const CheckIfBookmark = () => {
     setFavourite(
@@ -89,19 +96,18 @@ export default function MediaPlayer({ route, navigation }) {
 
   useEffect(() => {
     CheckIfBookmark();
-    switch (FileType) {
-      case "audio":
-        LoadAudio();
-        return () => UnloadAudio();
 
-      case "video":
-        break;
-    }
+    mediaReference =
+      FileType == "audio"
+        ? sound.current
+        : FileType == "video"
+        ? video.current
+        : null;
+
+    Load();
+
+    return () => Unload();
   }, [content]);
-
-  const UnloadAudio = async () => {
-    await sound.current.unloadAsync();
-  };
 
   const PlaybackUpdate = (status) => {
     if (!status.isLoaded) return;
@@ -109,15 +115,20 @@ export default function MediaPlayer({ route, navigation }) {
     setContentProgress(status.positionMillis / 1000);
     if (status.didJustFinish) {
       sound.current.setPositionAsync(0);
-      PauseAudio();
+      Pause();
     }
   };
-
-  const LoadAudio = async () => {
+  const Unload = async () => {
+    if (sound.current) await sound.current.unloadAsync();
+    if (video.current) await video.current.unloadAsync();
+  };
+  const Load = async () => {
     if (Loading) return;
+    if (!mediaReference) return;
     setContentProgress(0);
     setContentDuration(0);
-    sound.current.setOnPlaybackStatusUpdate((status) => {
+
+    mediaReference.setOnPlaybackStatusUpdate((status) => {
       PlaybackUpdate(status);
     });
 
@@ -127,13 +138,13 @@ export default function MediaPlayer({ route, navigation }) {
 
     await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
 
-    const checkLoading = await sound.current.getStatusAsync();
+    const checkLoading = await mediaReference.getStatusAsync();
     if (checkLoading.isLoaded === false) {
       try {
-        const result = await sound.current.loadAsync(
+        const result = await mediaReference.loadAsync(
           { uri: content.link },
           { shouldPlay: true },
-          true
+          false
         );
         if (result.isLoaded === false) {
           SetLoading(false);
@@ -153,26 +164,22 @@ export default function MediaPlayer({ route, navigation }) {
     }
   };
 
-  const PlayAudio = async () => {
+  const Play = async () => {
     try {
-      const result = await sound.current.getStatusAsync();
+      const result = await mediaReference.getStatusAsync();
       if (result.isLoaded) {
-        if (Playing === false) {
-          sound.current.playAsync();
-        }
+        mediaReference.playAsync();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const PauseAudio = async () => {
+  const Pause = async () => {
     try {
-      const result = await sound.current.getStatusAsync();
+      const result = await mediaReference.getStatusAsync();
       if (result.isLoaded) {
-        if (Playing === true) {
-          sound.current.pauseAsync();
-        }
+        mediaReference.pauseAsync();
       }
     } catch (error) {
       console.log(error);
@@ -180,8 +187,8 @@ export default function MediaPlayer({ route, navigation }) {
   };
 
   const HandlePlayButtonClick = () => {
-    if (Playing) PauseAudio();
-    else PlayAudio();
+    if (Playing) Pause();
+    else Play();
   };
 
   const HandleNextTrackButton = () => {
@@ -219,10 +226,22 @@ export default function MediaPlayer({ route, navigation }) {
   return (
     <SafeAreaView style={MediaPlayerStyles.container}>
       <View style={MediaPlayerStyles.informationSection}>
-        <Image
-          style={MediaPlayerStyles.cover}
-          source={{ uri: content.thumbnail }}
-        />
+        {FileType == "audio" ? (
+          <Image
+            style={MediaPlayerStyles.cover}
+            source={{ uri: content.thumbnail }}
+          />
+        ) : (
+          <Video
+            ref={video}
+            usePoster={true}
+            style={MediaPlayerStyles.video}
+            posterStyle={{ resizeMode: "cover" }}
+            resizeMode={"cover"}
+            posterSource={{ uri: content.thumbnail }}
+          ></Video>
+        )}
+
         <View style={MediaPlayerStyles.information}>
           <Text style={MediaPlayerStyles.title}>{content.title}</Text>
           <TouchableWithoutFeedback
@@ -243,13 +262,13 @@ export default function MediaPlayer({ route, navigation }) {
             setContentProgress(value);
           }}
           onTouchStart={() => {
-            PauseAudio();
+            Pause();
           }}
           onTouchEnd={() => {
-            PlayAudio();
+            Play();
           }}
           onSlidingComplete={(value) => {
-            sound.current.setPositionAsync(value * 1000);
+            mediaReference.setPositionAsync(value * 1000);
           }}
           value={contentProgress}
           minimumValue={0}
@@ -271,11 +290,11 @@ export default function MediaPlayer({ route, navigation }) {
 
         <View style={MediaPlayerStyles.progressControls}>
           <TouchableHighlight
-            disabled={!(playlistArray.length > 1)}
+            disabled={playlistArray.length <= 1 || Loading ? true : false}
             underlayColor={AppColors.accent}
             style={[
               MediaPlayerStyles.skipBtns,
-              { opacity: playlistArray.length > 1 ? 1 : 0.4 },
+              { opacity: playlistArray.length <= 1 || Loading ? 0.4 : 1 },
             ]}
             onPress={() => {
               HandlePreviousTrackButton();
@@ -299,11 +318,11 @@ export default function MediaPlayer({ route, navigation }) {
             />
           </TouchableHighlight>
           <TouchableHighlight
-            disabled={playlistArray.length <= 1}
+            disabled={playlistArray.length <= 1 || Loading ? true : false}
             underlayColor={AppColors.accent}
             style={[
               MediaPlayerStyles.skipBtns,
-              { opacity: playlistArray.length > 1 ? 1 : 0.4 },
+              { opacity: playlistArray.length <= 1 || Loading ? 0.4 : 1 },
             ]}
             onPress={() => {
               HandleNextTrackButton();
