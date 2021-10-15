@@ -114,7 +114,7 @@ export default function MediaPlayer({ route, navigation }) {
     SetPlaying(status.isPlaying);
     setContentProgress(status.positionMillis / 1000);
     if (status.didJustFinish) {
-      sound.current.setPositionAsync(0);
+      mediaReference.setPositionAsync(0);
       Pause();
     }
   };
