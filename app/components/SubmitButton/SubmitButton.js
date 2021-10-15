@@ -10,6 +10,7 @@ export default function SubmitButton(props) {
     <View
       style={[
         SubmitButtonStyles.container,
+        props.style,
         { backgroundColor: props.color || AppColors.primary },
       ]}
     >

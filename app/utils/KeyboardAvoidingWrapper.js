@@ -5,10 +5,10 @@ import {
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 
-export default function KeyboardAvoidingWrapper({ children }) {
+export default function KeyboardAvoidingWrapper({ style, children }) {
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={[{ flex: 1 }, style]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

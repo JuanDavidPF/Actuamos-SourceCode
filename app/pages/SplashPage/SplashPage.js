@@ -34,7 +34,10 @@ export default function SplashPage({ navigation }) {
             userState.userData = doc.data();
           }
           userState = JSON.stringify(userState);
-          navigation.replace("Hub", { userInfo: userState });
+
+          firebase.auth().currentUser.displayName
+            ? navigation.replace("Hub", { userInfo: userState })
+            : navigation.replace("WelcomePage", { userInfo: userState });
         });
     } catch (err) {
       Alert.alert("There is something wrong!", err.message);

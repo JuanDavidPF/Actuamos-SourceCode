@@ -16,6 +16,7 @@ const Stack = createNativeStackNavigator();
 import SplashPage from "./app/pages/SplashPage/SplashPage";
 import LoginPage from "./app/pages/LoginPage/LoginPage";
 import HubPage from "./app/pages/HubPage/HubPage";
+import WelcomePage from "./app/pages/WelcomePage/WelcomePage";
 
 //Fonts
 import {
@@ -84,6 +85,7 @@ export default function App() {
             >
               <Stack.Screen name="Splash" component={SplashPage} />
               <Stack.Screen name="Login" component={LoginPage} />
+              <Stack.Screen name="WelcomePage" component={WelcomePage} />
               <Stack.Screen name="Hub" component={HubPage} />
             </Stack.Navigator>
           </NavigationContainer>

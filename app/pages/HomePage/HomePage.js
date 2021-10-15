@@ -17,6 +17,7 @@ const Stack = createNativeStackNavigator();
 //Styles
 import { HomePageStyles } from "./HomePageStyles";
 import { MediaContext } from "../../utils/Contexts/MediaContext";
+import { UserContext } from "../../utils/Contexts/UserContext";
 
 export default function HomePage({ navigation }) {
   return (
@@ -32,6 +33,17 @@ export default function HomePage({ navigation }) {
 
 const PlaylistSelectionPage = ({ navigation }) => {
   const { playlist, playlistArray } = useContext(MediaContext);
+
+  const { userState } = useContext(UserContext);
+  const [userName, setUsername] = useState("Apreciad@");
+
+  useEffect(() => {
+    if (userState.value) {
+      if (userState.value.authData.displayName) {
+        setUsername(userState.value.authData.displayName);
+      }
+    }
+  }, [userState.value]);
 
   useEffect(() => {
     if (playlist.value) {
@@ -71,7 +83,6 @@ const PlaylistSelectionPage = ({ navigation }) => {
     navigation.navigate("Playlist");
   };
 
-  const [userName, setUsername] = useState("Apreciad@");
   const [playlists, setPlaylists] = useState();
   const [currentCard, setCurrentCard] = useState(0);
 

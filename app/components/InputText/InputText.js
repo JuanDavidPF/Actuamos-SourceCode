@@ -6,7 +6,7 @@ import { InputTextStyles } from "./InputTextStyles";
 
 export default function InputText(props) {
   return (
-    <TextInput {...props} style={InputTextStyles.input}>
+    <TextInput {...props} style={[InputTextStyles.input, props.style]}>
       {props.children}
     </TextInput>
   );
