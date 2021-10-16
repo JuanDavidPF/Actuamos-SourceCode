@@ -35,15 +35,9 @@ const PlaylistSelectionPage = ({ navigation }) => {
   const { playlist, playlistArray } = useContext(MediaContext);
 
   const { userState } = useContext(UserContext);
-  const [userName, setUsername] = useState("Apreciad@");
-
-  useEffect(() => {
-    if (userState.value) {
-      if (userState.value.authData.displayName) {
-        setUsername(userState.value.authData.displayName);
-      }
-    }
-  }, [userState.value]);
+  const [userName, setUsername] = useState(
+    userState.value.authData.displayName || "Apreciad@"
+  );
 
   useEffect(() => {
     if (playlist.value) {

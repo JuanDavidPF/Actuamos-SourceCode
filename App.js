@@ -1,5 +1,5 @@
 //React - Expo dependencies
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppLoading from "expo-app-loading";
 
 //Firebase
@@ -7,8 +7,12 @@ import firebase from "firebase";
 import apiKeys from "./app/config/keys";
 
 //Stack navigation
+import { StackActions } from "@react-navigation/routers";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from "@react-navigation/native";
 const Stack = createNativeStackNavigator();
 
 // //Pages
@@ -35,8 +39,10 @@ import { Poppins_400Regular } from "@expo-google-fonts/poppins";
 import { LogBox } from "react-native";
 import { MediaContext } from "./app/utils/Contexts/MediaContext";
 import { UserContext } from "./app/utils/Contexts/UserContext";
+import { loggingOut } from "./API/firebaseMethods";
 
 export default function App() {
+  const navigationRef = useNavigationContainerRef();
   LogBox.ignoreLogs(["Setting a timer"]);
   //firebase initialization
   if (!firebase.apps.length) {
@@ -57,10 +63,71 @@ export default function App() {
     Poppins_Regular: Poppins_400Regular,
   });
 
+  const [fetchingFinished, setfetchingFinished] = useState(false);
   const [content, setContent] = useState();
   const [playlist, setPlaylist] = useState();
   const [playlistArray, setPlaylistArray] = useState([]);
   const [userState, setUserState] = useState();
+
+  useEffect(() => {
+    ListenAuthChanges();
+  }, []);
+
+  useEffect(() => {
+    if (fetchingFinished && navigationRef.current.isReady) {
+      setfetchingFinished(false);
+      navigationRef.current.dispatch(StackActions.replace("Hub"));
+    }
+  }, [fetchingFinished]);
+
+  useEffect(() => {
+    if (userState) setfetchingFinished(true);
+  }, [userState]);
+
+  const ListenAuthChanges = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        if (navigationRef.current.isReady)
+          navigationRef.current.dispatch(StackActions.replace("Splash"));
+        fetchUserData();
+      } else if (!user) {
+        if (navigationRef.current.isReady)
+          navigationRef.current.dispatch(StackActions.replace("Login"));
+      }
+    });
+  };
+
+  const fetchUserData = () => {
+    try {
+      setfetchingFinished(false);
+      const db = firebase.firestore();
+      const auth = firebase.auth();
+
+      let data = {
+        authData: auth.currentUser,
+        userData: {
+          bookmarks: [],
+          testsFinished: [],
+        },
+      };
+
+      db.collection("Users")
+        .doc(auth.currentUser.uid)
+        .get()
+        .then((doc) => {
+          if (doc.data()) {
+            if (doc.data().bookmarks)
+              data.userData.bookmarks = doc.data().bookmarks;
+            if (doc.data().testsFinished)
+              data.userData.testsFinished = doc.data().testsFinished;
+          }
+
+          setUserState(JSON.parse(JSON.stringify(data)));
+        });
+    } catch (err) {
+      Alert.alert("There is something wrong!", err.message);
+    }
+  }; //closes fetchUserData method
 
   if (!fontsLoaded) return <AppLoading />;
   else
@@ -78,7 +145,7 @@ export default function App() {
             playlistArray: { value: playlistArray, setter: setPlaylistArray },
           }}
         >
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
             <Stack.Navigator
               initialRouteName="Splash"
               screenOptions={{ headerShown: false }}
@@ -92,4 +159,4 @@ export default function App() {
         </MediaContext.Provider>
       </UserContext.Provider>
     );
-}
+} //closes App component

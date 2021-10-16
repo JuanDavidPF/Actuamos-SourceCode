@@ -18,15 +18,15 @@ import { AppColors } from "../../config/AppColors";
 import BottomNavbarIcon from "../../components/BottomNavbarIcon/BottomNavbarIcon";
 import { HubPageStyles } from "./HubPageStyles";
 import { UserContext } from "../../utils/Contexts/UserContext";
+import { loggingOut } from "../../../API/firebaseMethods";
 
-export default function HubPage({ navigation, route }) {
+export default function HubPage({ navigation }) {
   const { userState } = useContext(UserContext);
 
   useEffect(() => {
-    let userInfo = JSON.parse(route.params.userInfo);
-    let bookmarksID = JSON.parse(JSON.stringify(userInfo.userData.bookmarks));
+    let userInfo = userState.value;
+    let bookmarksID = userState.value.userData.bookmarks;
     userInfo.userData.bookmarks = [];
-    userState.setter(userInfo);
 
     try {
       const db = firebase.firestore();
@@ -52,7 +52,7 @@ export default function HubPage({ navigation, route }) {
       Alert.alert("There is something wrong!", error.message);
     }
     // userState.setter(JSON.parse(route.params.userInfo));
-  }, [route.params.userInfo]);
+  }, []);
 
   return (
     <Tab.Navigator

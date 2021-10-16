@@ -1,5 +1,5 @@
 //React - Expo dependencies
-import React from "react";
+import React, { useContext } from "react";
 import { Text, View } from "react-native";
 
 //firabase
@@ -10,6 +10,7 @@ import { AppColors } from "../../config/AppColors";
 //components
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import { ProfilePageStyles } from "./ProfilePageStyles";
+import { UserContext } from "../../utils/Contexts/UserContext";
 
 export default function ProfilePage({ navigation }) {
   return (
