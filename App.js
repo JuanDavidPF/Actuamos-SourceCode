@@ -76,7 +76,13 @@ export default function App() {
   useEffect(() => {
     if (fetchingFinished && navigationRef.current.isReady) {
       setfetchingFinished(false);
-      navigationRef.current.dispatch(StackActions.replace("Hub"));
+
+      if (navigationRef.current.isReady) {
+        if (firebase.auth().currentUser.displayName)
+          navigationRef.current.dispatch(StackActions.replace("Hub"));
+        else
+          navigationRef.current.dispatch(StackActions.replace("WelcomePage"));
+      }
     }
   }, [fetchingFinished]);
 
@@ -125,7 +131,7 @@ export default function App() {
           setUserState(JSON.parse(JSON.stringify(data)));
         });
     } catch (err) {
-      Alert.alert("There is something wrong!", err.message);
+      Alert.alert("¡Hubo un problema!", err.message);
     }
   }; //closes fetchUserData method
 
