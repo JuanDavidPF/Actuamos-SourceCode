@@ -1,24 +1,30 @@
 import React, { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { AppColors } from "../../config/AppColors";
 import InputSelectionGroup from "../../containers/InputSelectionGroup/InputSelectionGroup";
 import { TestPageStyles } from "./TestPageStyles";
 
 export default function TestPage({ navigation, route, callback }) {
   const test = route.params.test;
   const questions = test.questions;
+  const [testFinished, SetTestFinished] = useState(false);
   const [questionIndex, SetQuestionIndex] = useState(0);
   const [question, SetQuestion] = useState(questions[questionIndex]);
+  const [answers, SetAnswers] = useState([]);
 
   const FinishTest = () => {
-    callback();
+    SetTestFinished(true);
+    callback(answers);
   };
+
   const QuestionSelected = (answer) => {
-    let clone = JSON.parse(JSON.stringify(question));
-    clone.answer = answer;
-    questions[questionIndex] = clone;
-    SetQuestion(clone);
+    let answerClone = JSON.parse(JSON.stringify(answers));
+    if (!answerClone[questionIndex]) answerClone[questionIndex] = {};
+    answerClone[questionIndex].answer = answer;
+    answerClone[questionIndex].question = question.question;
+    SetAnswers(answerClone);
   };
 
   const NextQuestion = () => {
@@ -33,39 +39,47 @@ export default function TestPage({ navigation, route, callback }) {
   return (
     <SafeAreaView style={TestPageStyles.container}>
       <ScrollView>
-        <View style={TestPageStyles.questionContainer}>
-          <View>
-            <Text style={TestPageStyles.testTitle}>{test.title}</Text>
-            <Text style={TestPageStyles.testProgress}>{`Pregunta: ${
-              questionIndex + 1
-            } / ${questions.length}`}</Text>
+        {testFinished ? (
+          <ActivityIndicator
+            style={{ marginTop: 100 }}
+            size={"large"}
+            color={AppColors.accent}
+          />
+        ) : (
+          <View style={TestPageStyles.questionContainer}>
+            <View>
+              <Text style={TestPageStyles.testTitle}>{test.title}</Text>
+              <Text style={TestPageStyles.testProgress}>{`Pregunta: ${
+                questionIndex + 1
+              } / ${questions.length}`}</Text>
+            </View>
+            <View>
+              <Text style={TestPageStyles.questionTitle}>
+                {question.question}
+              </Text>
+              <InputSelectionGroup
+                options={question.options}
+                answer={answers[questionIndex] && answers[questionIndex].answer}
+                selectionCallback={QuestionSelected}
+              />
+            </View>
           </View>
-          <View>
-            <Text style={TestPageStyles.questionTitle}>
-              {question.question}
-            </Text>
-
-            <InputSelectionGroup
-              options={question.options}
-              answer={questions[questionIndex].answer}
-              selectionCallback={QuestionSelected}
-            />
-          </View>
-        </View>
+        )}
       </ScrollView>
 
       <View style={TestPageStyles.navigationButtonsContainer}>
-        <SubmitButton
-          style={TestPageStyles.previousQuestionBtn}
-          onPress={questionIndex == 0 ? navigation.goBack : PreviousQuestion}
-        >
-          {questionIndex == 0 ? "Volver" : "Anterior"}
-        </SubmitButton>
-
-        {question.answer && (
+        {!testFinished && (
+          <SubmitButton
+            style={TestPageStyles.previousQuestionBtn}
+            onPress={questionIndex == 0 ? navigation.goBack : PreviousQuestion}
+          >
+            {questionIndex == 0 ? "Volver" : "Anterior"}
+          </SubmitButton>
+        )}
+        {answers[questionIndex] && !testFinished && (
           <SubmitButton
             onPress={
-              questionIndex == questions.length - 1 ? callback : NextQuestion
+              questionIndex == questions.length - 1 ? FinishTest : NextQuestion
             }
             style={TestPageStyles.nextQuestionBtn}
           >

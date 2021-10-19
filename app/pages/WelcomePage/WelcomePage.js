@@ -17,14 +17,43 @@ import { UserContext } from "../../utils/Contexts/UserContext";
 import KeyboardAvoidingWrapper from "../../utils/KeyboardAvoidingWrapper";
 import TestPage from "../TestPage/TestPage";
 import { WelcomePageStyles } from "./WelcomePageStyles";
-
+import { loggingOut } from "../../../API/firebaseMethods";
+let userName = "";
 //navigation
 const Stack = createNativeStackNavigator();
-const HandleTestFinished = () => {
-  console.log("finished");
-};
+const firstTestKey = "56kFX5NIfjX9cQQ48FK6";
 
 export default function WelcomePage({ navigation }) {
+  const { userState } = useContext(UserContext);
+  const HandleTestFinished = (answer) => {
+    try {
+      const db = firebase.firestore();
+      db.collection("Tests")
+        .doc(firstTestKey)
+        .collection("Responses")
+        .doc(firebase.auth().currentUser.uid)
+        .set({
+          answers: answer,
+        })
+        .then(() => {
+          try {
+            const auth = firebase.auth();
+            auth.currentUser
+              .updateProfile({ displayName: userName })
+              .then(() => {
+                const userClone = JSON.parse(JSON.stringify(userState.value));
+                userClone.authData = firebase.auth().currentUser;
+                userState.setter(userClone);
+              });
+          } catch (err) {
+            Alert.alert("¡Hubo un problema!", err.message);
+          }
+        });
+    } catch (err) {
+      Alert.alert("¡Hubo un problema!", err.message);
+    }
+  };
+
   return (
     <Stack.Navigator
       initialRouteName="DisplayNameSetter"
@@ -43,7 +72,6 @@ const SetDisplayNamePage = ({ navigation, route }) => {
   const [displayName, SetDisplayName] = useState("");
   const [test, SetTest] = useState();
   const { userState } = useContext(UserContext);
-  const firstTestKey = "56kFX5NIfjX9cQQ48FK6";
 
   useEffect(() => {
     if (test)
@@ -67,31 +95,48 @@ const SetDisplayNamePage = ({ navigation, route }) => {
       Alert.alert("¡Hubo un problema!", err.message);
     }
   };
-  const TestFinished = () => {
-    console.log("Test finished");
-  };
 
   const HandleNextButtonPress = () => {
     if (displayName) {
-      let firstTestFinished = userState.value.userData.testsFinished.find(
-        (test) => {
-          test.testID == firstTestKey;
-        }
-      );
+      userName = displayName;
+      try {
+        const db = firebase.firestore();
+        db.collection("Tests")
+          .doc(firstTestKey)
+          .collection("Responses")
+          .doc(userState.value.authData.uid)
+          .get()
+          .then((doc) => {
+            const firstTestFinished = doc.data();
 
-      if (firstTestFinished)
-        mainNavigator.dispatch(StackActions.replace("Hub"));
-      else {
-        FetchTest();
+            if (firstTestFinished) {
+              try {
+                const auth = firebase.auth();
+                auth.currentUser
+                  .updateProfile({ displayName: userName })
+                  .then(() => {
+                    const userClone = JSON.parse(
+                      JSON.stringify(userState.value)
+                    );
+
+                    userClone.authData = firebase.auth().currentUser;
+                    userState.setter(userClone);
+                  });
+              } catch (err) {
+                Alert.alert("¡Hubo un problema!", err.message);
+              }
+            } else {
+              FetchTest();
+            }
+          });
+      } catch (err) {
+        Alert.alert("¡Hubo un problema!", err.message);
       }
     } else {
       Alert.alert("¡Espera!", "Por favor danos un nombre por el cual llamarte");
     }
   };
 
-  const FinishedTest = () => {
-    console.log("Test finsished");
-  };
   return (
     <KeyboardAvoidingWrapper>
       <SafeAreaView style={WelcomePageStyles.container}>
@@ -113,14 +158,15 @@ const SetDisplayNamePage = ({ navigation, route }) => {
             {displayName}
           </InputText>
         </View>
-
-        <SubmitButton
-          onPress={HandleNextButtonPress}
-          color={AppColors.accent}
-          style={WelcomePageStyles.nextButton}
-        >
-          Siguiente
-        </SubmitButton>
+        <View style={WelcomePageStyles.buttonContainer}>
+          <SubmitButton
+            onPress={HandleNextButtonPress}
+            color={AppColors.accent}
+            style={WelcomePageStyles.button}
+          >
+            Siguiente
+          </SubmitButton>
+        </View>
       </SafeAreaView>
     </KeyboardAvoidingWrapper>
   );

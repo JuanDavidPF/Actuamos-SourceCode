@@ -47,7 +47,14 @@ export const WelcomePageStyles = StyleSheet.create({
     color: AppColors.white,
   },
 
-  nextButton: {
+  buttonContainer: {
+    width: "100%",
+
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  button: {
+    marginVertical: 10,
     width: "90%",
   },
 });

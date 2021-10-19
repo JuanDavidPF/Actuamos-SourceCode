@@ -113,7 +113,6 @@ export default function App() {
         authData: auth.currentUser,
         userData: {
           bookmarks: [],
-          testsFinished: [],
         },
       };
 
@@ -124,8 +123,6 @@ export default function App() {
           if (doc.data()) {
             if (doc.data().bookmarks)
               data.userData.bookmarks = doc.data().bookmarks;
-            if (doc.data().testsFinished)
-              data.userData.testsFinished = doc.data().testsFinished;
           }
 
           setUserState(JSON.parse(JSON.stringify(data)));
