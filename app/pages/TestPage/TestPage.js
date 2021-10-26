@@ -3,6 +3,8 @@ import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import { AppColors } from "../../config/AppColors";
+
+import MultiInputSelectionGroup from "../../containers/MultiInputSelectionGroup/MultiInputSelectionGroup";
 import InputSelectionGroup from "../../containers/InputSelectionGroup/InputSelectionGroup";
 import { TestPageStyles } from "./TestPageStyles";
 
@@ -19,10 +21,32 @@ export default function TestPage({ navigation, route, callback }) {
     callback(answers);
   };
 
-  const QuestionSelected = (answer) => {
+  const SingleAnswerSelection = (answer) => {
     let answerClone = JSON.parse(JSON.stringify(answers));
     if (!answerClone[questionIndex]) answerClone[questionIndex] = {};
     answerClone[questionIndex].answer = answer;
+    answerClone[questionIndex].question = question.question;
+    SetAnswers(answerClone);
+  };
+
+  const MultipleAnswerSelection = (answer) => {
+    let answerClone = JSON.parse(JSON.stringify(answers));
+    ///////////
+    if (!answerClone[questionIndex]) answerClone[questionIndex] = {};
+    ///////////
+    if (!answerClone[questionIndex].answer)
+      answerClone[questionIndex].answer = [];
+
+    let answerIndex = answerClone[questionIndex].answer.findIndex(
+      (element) => element == answer
+    );
+
+    if (answerIndex >= 0) {
+      answerClone[questionIndex].answer.splice(answerIndex, 1);
+    } else {
+      answerClone[questionIndex].answer.push(answer);
+    }
+
     answerClone[questionIndex].question = question.question;
     SetAnswers(answerClone);
   };
@@ -57,11 +81,25 @@ export default function TestPage({ navigation, route, callback }) {
               <Text style={TestPageStyles.questionTitle}>
                 {question.question}
               </Text>
-              <InputSelectionGroup
-                options={question.options}
-                answer={answers[questionIndex] && answers[questionIndex].answer}
-                selectionCallback={QuestionSelected}
-              />
+              {question.type == "single" && (
+                <InputSelectionGroup
+                  options={question.options}
+                  answer={
+                    answers[questionIndex] && answers[questionIndex].answer
+                  }
+                  selectionCallback={SingleAnswerSelection}
+                />
+              )}
+              {question.type == "multiple" && (
+                <MultiInputSelectionGroup
+                  options={question.options}
+                  answer={
+                    answers[questionIndex] && answers[questionIndex].answer
+                  }
+                  selectionCallback={MultipleAnswerSelection}
+                />
+              )}
+              {question.type == "date" && <Text>This is a date input</Text>}
             </View>
           </View>
         )}

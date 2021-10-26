@@ -43,6 +43,7 @@ import { loggingOut } from "./API/firebaseMethods";
 
 export default function App() {
   const navigationRef = useNavigationContainerRef();
+
   LogBox.ignoreLogs(["Setting a timer"]);
   //firebase initialization
   if (!firebase.apps.length) {
