@@ -76,8 +76,7 @@ export default function App() {
 
   useEffect(() => {
     if (fetchingFinished && navigationRef.current.isReady) {
-      setfetchingFinished(false);
-
+      // firebase.auth().currentUser.updateProfile({ displayName: "" });
       if (navigationRef.current.isReady) {
         if (firebase.auth().currentUser.displayName)
           navigationRef.current.dispatch(StackActions.replace("Hub"));
