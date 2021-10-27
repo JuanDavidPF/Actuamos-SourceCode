@@ -7,6 +7,7 @@ import { AppColors } from "../../config/AppColors";
 import MultiInputSelectionGroup from "../../containers/MultiInputSelectionGroup/MultiInputSelectionGroup";
 import InputSelectionGroup from "../../containers/InputSelectionGroup/InputSelectionGroup";
 import { TestPageStyles } from "./TestPageStyles";
+import DatePickerInput from "../../containers/DatePickerInput/DatePickerInput";
 
 export default function TestPage({ navigation, route, callback }) {
   const test = route.params.test;
@@ -47,6 +48,14 @@ export default function TestPage({ navigation, route, callback }) {
       answerClone[questionIndex].answer.push(answer);
     }
 
+    answerClone[questionIndex].question = question.question;
+    SetAnswers(answerClone);
+  };
+
+  const DateSelection = (answer) => {
+    let answerClone = JSON.parse(JSON.stringify(answers));
+    if (!answerClone[questionIndex]) answerClone[questionIndex] = {};
+    answerClone[questionIndex].answer = answer;
     answerClone[questionIndex].question = question.question;
     SetAnswers(answerClone);
   };
@@ -99,7 +108,14 @@ export default function TestPage({ navigation, route, callback }) {
                   selectionCallback={MultipleAnswerSelection}
                 />
               )}
-              {question.type == "date" && <Text>This is a date input</Text>}
+              {question.type == "date" && (
+                <DatePickerInput
+                  selectionCallback={DateSelection}
+                  answer={
+                    answers[questionIndex] && answers[questionIndex].answer
+                  }
+                />
+              )}
             </View>
           </View>
         )}
