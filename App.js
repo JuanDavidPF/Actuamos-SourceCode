@@ -79,8 +79,10 @@ export default function App() {
       if (navigationRef.current.isReady) {
         if (firebase.auth().currentUser.displayName)
           navigationRef.current.dispatch(StackActions.replace("Hub"));
-        else
+        else {
           navigationRef.current.dispatch(StackActions.replace("WelcomePage"));
+          setfetchingFinished(false);
+        }
       }
     }
   }, [fetchingFinished]);
@@ -93,7 +95,7 @@ export default function App() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         if (navigationRef.current.isReady)
-          navigationRef.current.dispatch(StackActions.replace("Hub"));
+          navigationRef.current.dispatch(StackActions.replace("Splash"));
         fetchUserData();
       } else if (!user) {
         if (navigationRef.current.isReady)
