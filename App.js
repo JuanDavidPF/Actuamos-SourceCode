@@ -75,8 +75,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (fetchingFinished && navigationRef.current.isReady) {
-      // firebase.auth().currentUser.updateProfile({ displayName: "" });
+    if (fetchingFinished) {
       if (navigationRef.current.isReady) {
         if (firebase.auth().currentUser.displayName)
           navigationRef.current.dispatch(StackActions.replace("Hub"));
@@ -94,7 +93,7 @@ export default function App() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         if (navigationRef.current.isReady)
-          navigationRef.current.dispatch(StackActions.replace("Splash"));
+          navigationRef.current.dispatch(StackActions.replace("Hub"));
         fetchUserData();
       } else if (!user) {
         if (navigationRef.current.isReady)
