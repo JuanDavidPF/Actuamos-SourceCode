@@ -4,7 +4,7 @@ import { Fonts, FontsSizes } from "../../config/AppFonts";
 
 export const TestPageStyles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingTop: StatusBar.currentHeight + 30,
     backgroundColor: AppColors.primary,
     flex: 1,
     paddingHorizontal: 25,

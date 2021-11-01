@@ -81,7 +81,9 @@ export default function TestPage({ navigation, route, callback }) {
         ) : (
           <View style={TestPageStyles.questionContainer}>
             <View>
-              <Text style={TestPageStyles.testTitle}>{test.title}</Text>
+              <Text
+                style={TestPageStyles.testTitle}
+              >{`${test.title} - ${question.subtitle}`}</Text>
               <Text style={TestPageStyles.testProgress}>{`Pregunta: ${
                 questionIndex + 1
               } / ${questions.length}`}</Text>

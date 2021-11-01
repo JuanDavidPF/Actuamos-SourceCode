@@ -2,12 +2,11 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
 import firebase from "firebase";
 
-import { Image, Text, TouchableHighlight, View } from "react-native";
+import { Image, Platform, Text, TouchableHighlight, View } from "react-native";
 import { AppColors } from "../../config/AppColors";
 import { DatePickerInputStyle } from "./DatePickerInputStyle";
 
 export default function DatePickerInput({ selectionCallback, answer }) {
-  const [dateSetted, SetDateSetted] = useState(false);
   const [stringDate, SetStringDate] = useState("DD/MM/AAAA");
   const [date, SetDate] = useState(new Date());
   const [isDatePickerOpened, SetIsDatePickerOpened] = useState(false);
@@ -27,16 +26,19 @@ export default function DatePickerInput({ selectionCallback, answer }) {
   };
 
   useEffect(() => {
-    if (!dateSetted) return;
-    SetStringDate(DateToDDMMAAAA(date));
-    selectionCallback(date);
-  }, [date]);
+    if (!answer) return;
+
+    const answerParsed = new Date(answer);
+    SetDate(answerParsed);
+    SetStringDate(DateToDDMMAAAA(answerParsed));
+  }, [answer]);
 
   const onChange = (event, selectedDate) => {
-    if (event.type == "set") SetDateSetted(true);
+    if (event.type == "set" || Platform.OS === "ios");
     const currentDate = selectedDate || date;
-    SetDate(currentDate);
-    SetIsDatePickerOpened(false);
+    selectionCallback(currentDate);
+
+    if (Platform.OS === "android") SetIsDatePickerOpened(false);
   };
   return (
     <View>
