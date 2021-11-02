@@ -75,11 +75,6 @@ export default function App() {
   const [logMessage, setLogMessage] = useState("App starting");
 
   useEffect(() => {
-    HandleUserAuthState(firebase.auth().currentUser);
-    ListenAuthChanges();
-  }, []);
-
-  useEffect(() => {
     if (fetchingFinished) {
       setLogMessage(`${logMessage}\nAnalyzing user`);
       if (navigationRef.current?.isReady) {
@@ -118,15 +113,15 @@ export default function App() {
       setLogMessage(
         `${logMessage}\nHandeling user data\nAn user was found or logged, fetching user info`
       );
-      if (navigationRef.current?.isReady)
-        navigationRef.current.dispatch(StackActions.replace("Splash"));
+
+      navigationRef.current.dispatch(StackActions.replace("Splash"));
       fetchUserData();
     } else if (!user) {
       setLogMessage(
         `${logMessage}\nHandeling user data\nUser Wasn't found, going to login`
       );
-      if (navigationRef.current?.isReady)
-        navigationRef.current.dispatch(StackActions.replace("Login"));
+
+      navigationRef.current.dispatch(StackActions.replace("Login"));
     }
   };
 
@@ -159,6 +154,12 @@ export default function App() {
       Alert.alert("¡Hubo un problema!", err.message);
     }
   }; //closes fetchUserData method
+
+  useEffect(() => {
+    if (!fontsLoaded) return;
+
+    ListenAuthChanges();
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) return <AppLoading />;
   else
