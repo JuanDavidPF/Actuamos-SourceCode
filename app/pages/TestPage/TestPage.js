@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
@@ -12,6 +12,8 @@ import DatePickerInput from "../../containers/DatePickerInput/DatePickerInput";
 export default function TestPage({ navigation, route, callback }) {
   const test = route.params.test;
   const questions = test.questions;
+
+  const scrollRef = useRef();
   const [testFinished, SetTestFinished] = useState(false);
   const [questionIndex, SetQuestionIndex] = useState(0);
   const [question, SetQuestion] = useState(questions[questionIndex]);
@@ -63,15 +65,17 @@ export default function TestPage({ navigation, route, callback }) {
   const NextQuestion = () => {
     SetQuestion(questions[questionIndex + 1]);
     SetQuestionIndex(questionIndex + 1);
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
   const PreviousQuestion = () => {
     SetQuestion(questions[questionIndex - 1]);
     SetQuestionIndex(questionIndex - 1);
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
 
   return (
     <SafeAreaView style={TestPageStyles.container}>
-      <ScrollView>
+      <ScrollView ref={scrollRef}>
         {testFinished ? (
           <ActivityIndicator
             style={{ marginTop: 100 }}
