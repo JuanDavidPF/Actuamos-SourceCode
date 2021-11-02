@@ -75,10 +75,8 @@ export default function App() {
   const [logMessage, setLogMessage] = useState("App starting");
 
   useEffect(() => {
-    setTimeout(() => {
-      HandleUserAuthState(firebase.auth().currentUser);
-      ListenAuthChanges();
-    }, 1000);
+    HandleUserAuthState(firebase.auth().currentUser);
+    ListenAuthChanges();
   }, []);
 
   useEffect(() => {
@@ -109,9 +107,8 @@ export default function App() {
   const ListenAuthChanges = () => {
     firebase.auth().onAuthStateChanged((user) => {
       setLogMessage(`${logMessage}\nUser auth changed`);
-      setTimeout(() => {
-        HandleUserAuthState(user);
-      }, 1000);
+
+      HandleUserAuthState(user);
     });
   };
 
@@ -121,13 +118,15 @@ export default function App() {
       setLogMessage(
         `${logMessage}\nHandeling user data\nAn user was found or logged, fetching user info`
       );
-      navigationRef.current.dispatch(StackActions.replace("Splash"));
+      if (navigationRef.current?.isReady)
+        navigationRef.current.dispatch(StackActions.replace("Splash"));
       fetchUserData();
     } else if (!user) {
       setLogMessage(
         `${logMessage}\nHandeling user data\nUser Wasn't found, going to login`
       );
-      navigationRef.current.dispatch(StackActions.replace("Login"));
+      if (navigationRef.current?.isReady)
+        navigationRef.current.dispatch(StackActions.replace("Login"));
     }
   };
 
