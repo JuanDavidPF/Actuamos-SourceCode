@@ -4,12 +4,12 @@ import { Fonts, FontsSizes } from "../../config/AppFonts";
 
 export const HomePageStyles = StyleSheet.create({
   container: {
+    paddingTop: 50,
     flex: 1,
     backgroundColor: AppColors.primary,
   },
 
   greetingSection: {
-    marginTop: 65,
     paddingHorizontal: "10%",
   },
   greetingTitle: {

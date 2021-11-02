@@ -24,11 +24,7 @@ export default function PlaylistCarousel(props) {
   };
 
   return (
-    <View
-      style={{
-        marginTop: 50,
-      }}
-    >
+    <View style={props.style}>
       {props.list ? (
         <Carousel
           ref={(c) => {

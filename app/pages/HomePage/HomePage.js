@@ -108,19 +108,22 @@ const PlaylistSelectionPage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={HomePageStyles.container}>
-      <View style={HomePageStyles.greetingSection}>
-        <Text style={HomePageStyles.greetingTitle}>¡Hola!</Text>
-        <Text style={HomePageStyles.greetingName}>{userName}</Text>
-        <Text style={HomePageStyles.greetingDescription}>
-          Cuentanos: ¿Con que frase te identificas mejor en este momento?
-        </Text>
-      </View>
+      <ScrollView>
+        <View style={HomePageStyles.greetingSection}>
+          <Text style={HomePageStyles.greetingTitle}>¡Hola!</Text>
+          <Text style={HomePageStyles.greetingName}>{userName}</Text>
+          <Text style={HomePageStyles.greetingDescription}>
+            Cuentanos: ¿Con que frase te identificas mejor en este momento?
+          </Text>
+        </View>
 
-      <PlaylistCarousel
-        list={playlists}
-        onCardSelected={handleCardSelection}
-        currentCard={currentCard}
-      />
+        <PlaylistCarousel
+          style={{ marginTop: 75, paddingBottom: 150 }}
+          list={playlists}
+          onCardSelected={handleCardSelection}
+          currentCard={currentCard}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
