@@ -36,10 +36,11 @@ import {
 } from "@expo-google-fonts/lato";
 import { Poppins_400Regular } from "@expo-google-fonts/poppins";
 
-import { LogBox } from "react-native";
+import { LogBox, Platform, StatusBar, Text, View } from "react-native";
 import { MediaContext } from "./app/utils/Contexts/MediaContext";
 import { UserContext } from "./app/utils/Contexts/UserContext";
 import { loggingOut } from "./API/firebaseMethods";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function App() {
   const navigationRef = useNavigationContainerRef();
@@ -70,16 +71,27 @@ export default function App() {
   const [playlistArray, setPlaylistArray] = useState([]);
   const [userState, setUserState] = useState();
 
+  const [consoleEnable, SetConsoleEnable] = useState(false);
+  const [logMessage, setLogMessage] = useState("App starting");
+
   useEffect(() => {
-    ListenAuthChanges();
+    setTimeout(() => {
+      HandleUserAuthState(firebase.auth().currentUser);
+      ListenAuthChanges();
+    }, 1000);
   }, []);
 
   useEffect(() => {
     if (fetchingFinished) {
-      if (navigationRef.current.isReady) {
-        if (firebase.auth().currentUser.displayName)
+      setLogMessage(`${logMessage}\nAnalyzing user`);
+      if (navigationRef.current?.isReady) {
+        if (firebase.auth().currentUser.displayName) {
+          setLogMessage(`${logMessage}\nUser has a name, going to Home`);
           navigationRef.current.dispatch(StackActions.replace("Hub"));
-        else {
+        } else {
+          setLogMessage(
+            `${logMessage}\nUser has not a name, going to Test page`
+          );
           navigationRef.current.dispatch(StackActions.replace("WelcomePage"));
           setfetchingFinished(false);
         }
@@ -88,20 +100,35 @@ export default function App() {
   }, [fetchingFinished]);
 
   useEffect(() => {
-    if (userState) setfetchingFinished(true);
+    if (userState) {
+      setLogMessage(`${logMessage}\nData saved!`);
+      setfetchingFinished(true);
+    }
   }, [userState]);
 
   const ListenAuthChanges = () => {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        if (navigationRef.current.isReady)
-          navigationRef.current.dispatch(StackActions.replace("Splash"));
-        fetchUserData();
-      } else if (!user) {
-        if (navigationRef.current.isReady)
-          navigationRef.current.dispatch(StackActions.replace("Login"));
-      }
+      setLogMessage(`${logMessage}\nUser auth changed`);
+      setTimeout(() => {
+        HandleUserAuthState(user);
+      }, 1000);
     });
+  };
+
+  const HandleUserAuthState = (user) => {
+    setLogMessage(`${logMessage}Handeling user data`);
+    if (user) {
+      setLogMessage(
+        `${logMessage}\nHandeling user data\nAn user was found or logged, fetching user info`
+      );
+      navigationRef.current.dispatch(StackActions.replace("Splash"));
+      fetchUserData();
+    } else if (!user) {
+      setLogMessage(
+        `${logMessage}\nHandeling user data\nUser Wasn't found, going to login`
+      );
+      navigationRef.current.dispatch(StackActions.replace("Login"));
+    }
   };
 
   const fetchUserData = () => {
@@ -110,6 +137,7 @@ export default function App() {
       const db = firebase.firestore();
       const auth = firebase.auth();
 
+      setLogMessage(`${logMessage}\nTrying to fetch data from firebase"`);
       let data = {
         authData: auth.currentUser,
         userData: {
@@ -125,7 +153,7 @@ export default function App() {
             if (doc.data().bookmarks)
               data.userData.bookmarks = doc.data().bookmarks;
           }
-
+          setLogMessage(`${logMessage}\nData found, saving data`);
           setUserState(JSON.parse(JSON.stringify(data)));
         });
     } catch (err) {
@@ -160,6 +188,32 @@ export default function App() {
               <Stack.Screen name="Hub" component={HubPage} />
             </Stack.Navigator>
           </NavigationContainer>
+          {consoleEnable && (
+            <View
+              style={{
+                marginTop: StatusBar.currentHeight,
+                height: 150,
+                position: "absolute",
+
+                width: "100%",
+                opacity: 0.5,
+              }}
+            >
+              <ScrollView>
+                <Text
+                  style={{
+                    backgroundColor: "tomato",
+
+                    color: "white",
+                    padding: 10,
+                    fontSize: 15,
+                  }}
+                >
+                  {logMessage}
+                </Text>
+              </ScrollView>
+            </View>
+          )}
         </MediaContext.Provider>
       </UserContext.Provider>
     );

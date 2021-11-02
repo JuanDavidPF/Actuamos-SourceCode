@@ -166,6 +166,14 @@ const SetDisplayNamePage = ({ navigation, route }) => {
           >
             Siguiente
           </SubmitButton>
+
+          <SubmitButton
+            onPress={loggingOut}
+            color={AppColors.primary}
+            style={WelcomePageStyles.button}
+          >
+            Cerrar Sesión
+          </SubmitButton>
         </View>
       </SafeAreaView>
     </KeyboardAvoidingWrapper>
