@@ -136,7 +136,13 @@ export default function MediaPlayer({ route, navigation }) {
     SetLoading(true);
     SetPlaying(false);
 
-    await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+    });
 
     const checkLoading = await mediaReference.getStatusAsync();
     if (checkLoading.isLoaded === false) {
