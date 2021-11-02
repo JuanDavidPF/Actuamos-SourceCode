@@ -40,6 +40,7 @@ export default function HubPage({ navigation }) {
               title: doc.data().title,
               thumbnail: doc.data().thumbnail,
               link: doc.data().link,
+              duration: doc.data().duration,
             };
 
             if (!userInfo.userData.bookmarks.includes(contentData)) {

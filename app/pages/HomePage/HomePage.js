@@ -56,6 +56,7 @@ const PlaylistSelectionPage = ({ navigation }) => {
                 title: doc.data().title,
                 thumbnail: doc.data().thumbnail,
                 link: doc.data().link,
+                duration: doc.data().duration,
               };
 
               if (!contentFetched.includes(contentData) && contentData.link) {
