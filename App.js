@@ -70,6 +70,7 @@ export default function App() {
   const [playlist, setPlaylist] = useState();
   const [playlistArray, setPlaylistArray] = useState([]);
   const [userState, setUserState] = useState();
+  const [isPlaylistFetching, setIsPlaylistFetching] = useState(false);
 
   const [consoleEnable, SetConsoleEnable] = useState(false);
   const [logMessage, setLogMessage] = useState("App starting");
@@ -175,6 +176,10 @@ export default function App() {
             },
             playlist: { value: playlist, setter: setPlaylist },
             playlistArray: { value: playlistArray, setter: setPlaylistArray },
+            playlistIsFetching: {
+              value: isPlaylistFetching,
+              setter: setIsPlaylistFetching,
+            },
           }}
         >
           <NavigationContainer ref={navigationRef}>

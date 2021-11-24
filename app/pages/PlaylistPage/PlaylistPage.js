@@ -22,7 +22,8 @@ import MainPlaylist from "../../components/PlaylistMain/MainPlaylist";
 import { MediaContext } from "../../utils/Contexts/MediaContext";
 
 export default function PlayListPage({ navigation }) {
-  const { playlist, playlistArray } = useContext(MediaContext);
+  const { playlist, playlistArray, playlistIsFetching } =
+    useContext(MediaContext);
 
   return (
     <View style={PlaylistPageStyles.container}>
@@ -47,7 +48,10 @@ export default function PlayListPage({ navigation }) {
       </Text>
 
       <View style={{ flex: 1, padding: 15 }}>
-        <MainPlaylist contentArray={playlistArray.value} />
+        <MainPlaylist
+          contentArray={playlistArray.value}
+          isFetching={playlistIsFetching.value}
+        />
       </View>
     </View>
   );

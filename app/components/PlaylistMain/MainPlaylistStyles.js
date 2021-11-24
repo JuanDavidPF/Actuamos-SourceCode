@@ -43,4 +43,12 @@ export const MainPlaylistStyles = StyleSheet.create({
     width: 35,
     height: 35,
   },
+
+  fetchingStatusLable: {
+    marginTop: 30,
+    textAlign: "center",
+    fontFamily: Fonts.Lato.Regular,
+    fontSize: FontsSizes.subtitle,
+    color: AppColors.white,
+  },
 });

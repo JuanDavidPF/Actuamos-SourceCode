@@ -13,7 +13,7 @@ const iconLibrary = {
   audio: require(iconPath + "audioType.png"),
 };
 
-export default function MainPlaylist({ contentArray }) {
+export default function MainPlaylist({ contentArray, isFetching }) {
   const navigation = useNavigation();
 
   const cardSelected = (item) => {
@@ -70,12 +70,21 @@ export default function MainPlaylist({ contentArray }) {
       ListFooterComponent={<View></View>}
       ListFooterComponentStyle={MainPlaylistStyles.flatListFooter}
     />
+  ) : isFetching ? (
+    <View>
+      <ActivityIndicator
+        style={{ marginTop: 100 }}
+        size={"large"}
+        color={AppColors.accent}
+      />
+      <Text style={MainPlaylistStyles.fetchingStatusLable}>
+        Descargando información
+      </Text>
+    </View>
   ) : (
-    <ActivityIndicator
-      style={{ marginTop: 100 }}
-      size={"large"}
-      color={AppColors.accent}
-    />
+    <Text style={MainPlaylistStyles.fetchingStatusLable}>
+      No hay elementos para mostrar.
+    </Text>
   );
 }
 const getFileIcon = (fileLink) => {

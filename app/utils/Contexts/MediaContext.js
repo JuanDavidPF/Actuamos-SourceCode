@@ -6,4 +6,5 @@ export const MediaContext = createContext({
   },
   playlist: { value: null, setter: null },
   playlistArray: { value: [], setter: null },
+  playlistIsFetching: { value: null, setter: null },
 });

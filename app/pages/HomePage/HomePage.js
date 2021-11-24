@@ -32,7 +32,8 @@ export default function HomePage({ navigation }) {
 } //closes HomePage JSX
 
 const PlaylistSelectionPage = ({ navigation }) => {
-  const { playlist, playlistArray } = useContext(MediaContext);
+  const { playlist, playlistArray, playlistIsFetching } =
+    useContext(MediaContext);
 
   const { userState } = useContext(UserContext);
   const [userName, setUsername] = useState(
@@ -42,6 +43,7 @@ const PlaylistSelectionPage = ({ navigation }) => {
   useEffect(() => {
     if (playlist.value) {
       try {
+        playlistIsFetching.setter(true);
         playlistArray.setter([]);
         let contentFetched = [];
         const db = firebase.firestore();
@@ -62,6 +64,7 @@ const PlaylistSelectionPage = ({ navigation }) => {
               if (!contentFetched.includes(contentData) && contentData.link) {
                 contentFetched.push(contentData);
               }
+              playlistIsFetching.setter(false);
               playlistArray.setter(contentFetched);
             });
         });
