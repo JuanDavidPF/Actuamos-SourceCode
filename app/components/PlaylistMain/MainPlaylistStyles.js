@@ -40,8 +40,8 @@ export const MainPlaylistStyles = StyleSheet.create({
     fontSize: FontsSizes.paragraph,
   },
   fileTypeIcon: {
-    width: 35,
-    height: 35,
+    width: 25,
+    resizeMode: "contain",
   },
 
   fetchingStatusLable: {
