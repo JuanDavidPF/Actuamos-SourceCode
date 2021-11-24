@@ -25,14 +25,14 @@ export default function ProfilePage({ navigation }) {
         Cerrar Sesión
       </SubmitButton>
 
-      <SubmitButton
+      {/* <SubmitButton
         color={AppColors.accent}
         onPress={() => {
           firebase.auth().currentUser.updateProfile({ displayName: "" });
         }}
       >
         Reiniciar Datos
-      </SubmitButton>
+      </SubmitButton> */}
     </View>
   );
 } //closes ProfilePage JSX
