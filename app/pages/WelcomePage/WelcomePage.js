@@ -25,6 +25,25 @@ const firstTestKey = "56kFX5NIfjX9cQQ48FK6";
 
 export default function WelcomePage({ navigation }) {
   const { userState } = useContext(UserContext);
+
+  return (
+    <Stack.Navigator
+      initialRouteName="DisplayNameSetter"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="DisplayNameSetter" component={SetDisplayNamePage} />
+      <Stack.Screen name="Test">
+        {(props) => <TestPage {...props} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+} //closes WelcomePage component
+
+const SetDisplayNamePage = ({ navigation, route }) => {
+  const mainNavigator = useNavigation();
+  const [displayName, SetDisplayName] = useState("");
+  const [test, SetTest] = useState();
+  const { userState } = useContext(UserContext);
   const HandleTestFinished = (answer) => {
     try {
       const db = firebase.firestore();
@@ -53,31 +72,12 @@ export default function WelcomePage({ navigation }) {
       Alert.alert("¡Hubo un problema!", err.message);
     }
   };
-
-  return (
-    <Stack.Navigator
-      initialRouteName="DisplayNameSetter"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="DisplayNameSetter" component={SetDisplayNamePage} />
-      <Stack.Screen name="Test">
-        {(props) => <TestPage {...props} callback={HandleTestFinished} />}
-      </Stack.Screen>
-    </Stack.Navigator>
-  );
-} //closes WelcomePage component
-
-const SetDisplayNamePage = ({ navigation, route }) => {
-  const mainNavigator = useNavigation();
-  const [displayName, SetDisplayName] = useState("");
-  const [test, SetTest] = useState();
-  const { userState } = useContext(UserContext);
-
   useEffect(() => {
     if (test)
       if (test.active) {
         navigation.navigate("Test", {
           test: test,
+          callback: HandleTestFinished.bind(this),
         });
       } else mainNavigator.dispatch(StackActions.replace("Hub"));
   }, [test]);

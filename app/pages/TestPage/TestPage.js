@@ -9,7 +9,7 @@ import InputSelectionGroup from "../../containers/InputSelectionGroup/InputSelec
 import { TestPageStyles } from "./TestPageStyles";
 import DatePickerInput from "../../containers/DatePickerInput/DatePickerInput";
 
-export default function TestPage({ navigation, route, callback }) {
+export default function TestPage({ navigation, route }) {
   const test = route.params.test;
   const questions = test.questions;
 
@@ -21,7 +21,7 @@ export default function TestPage({ navigation, route, callback }) {
 
   const FinishTest = () => {
     SetTestFinished(true);
-    callback(answers);
+    route.params.callback(answers);
   };
 
   const SingleAnswerSelection = (answer) => {

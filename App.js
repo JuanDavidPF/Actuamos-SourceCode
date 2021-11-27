@@ -41,10 +41,13 @@ import { MediaContext } from "./app/utils/Contexts/MediaContext";
 import { UserContext } from "./app/utils/Contexts/UserContext";
 import { loggingOut } from "./API/firebaseMethods";
 import { ScrollView } from "react-native-gesture-handler";
+import TestPage from "./app/pages/TestPage/TestPage";
 
 export default function App() {
   const navigationRef = useNavigationContainerRef();
-
+  LogBox.ignoreLogs([
+    "Non-serializable values were found in the navigation state",
+  ]);
   LogBox.ignoreLogs(["Setting a timer"]);
   //firebase initialization
   if (!firebase.apps.length) {
@@ -191,6 +194,7 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginPage} />
               <Stack.Screen name="WelcomePage" component={WelcomePage} />
               <Stack.Screen name="Hub" component={HubPage} />
+              <Stack.Screen name="Test" component={TestPage} />
             </Stack.Navigator>
           </NavigationContainer>
           {consoleEnable && (
