@@ -11,7 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Alert, Image, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InputText from "../../components/InputText/InputText";
-import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../components/SubmitButton/SubmitButton";
 import { AppColors } from "../../config/AppColors";
 import { UserContext } from "../../utils/Contexts/UserContext";
 import KeyboardAvoidingWrapper from "../../utils/KeyboardAvoidingWrapper";

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../components/SubmitButton/SubmitButton";
 import { AppColors } from "../../config/AppColors";
 
 import MultiInputSelectionGroup from "../../containers/MultiInputSelectionGroup/MultiInputSelectionGroup";

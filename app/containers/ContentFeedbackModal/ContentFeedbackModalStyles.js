@@ -9,16 +9,22 @@ export const ContentFeedbackModalStyles = StyleSheet.create({
     display: "flex",
     justifyContent: "flex-end",
     width: "100%",
-    height: "100%",
+    height: "120%",
     borderRadius: 20,
-    overflow: "hidden",
+
+    bottom: "-20%",
   },
 
   feedbackModal: {
+    display: "flex",
+    justifyContent: "center",
     backgroundColor: AppColors.secondaryModalBackground,
+
     borderRadius: 20,
     paddingVertical: 45,
+
     paddingHorizontal: 22,
+    maxHeight: "100%",
     width: "100%",
   },
   feedbackModalTitle: {

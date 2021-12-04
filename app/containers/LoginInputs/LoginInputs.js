@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 
 import InputText from "../../components/InputText/InputText";
-import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../components/SubmitButton/SubmitButton";
 import { AppColors } from "../../config/AppColors";
 import { LoginInputsStyles } from "./LoginInputsStyle";
 

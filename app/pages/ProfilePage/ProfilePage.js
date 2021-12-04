@@ -9,13 +9,12 @@ import firebase from "firebase";
 import { AppColors } from "../../config/AppColors";
 
 //components
-import SubmitButton from "../../components/SubmitButton/SubmitButton";
+
 import { ProfilePageStyles } from "./ProfilePageStyles";
 import { UserContext } from "../../utils/Contexts/UserContext";
-import TestPage from "../TestPage/TestPage";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Stack = createNativeStackNavigator();
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SubmitButton } from "../../components/SubmitButton/SubmitButton";
 
 export default function ProfilePage({ navigation }) {
   const lastTestKey = "26kgX5NIfjd9cHQ48Fd6";

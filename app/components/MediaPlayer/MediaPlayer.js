@@ -3,7 +3,7 @@ import Slider from "@react-native-community/slider";
 
 import { Audio, Video } from "expo-av";
 import React, { useContext, useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Alert, Image, Text, View } from "react-native";
 
 import {
   TouchableHighlight,
@@ -219,6 +219,24 @@ export default function MediaPlayer({ route, navigation }) {
     setContent(playlistArray[index]);
   };
 
+  const HandleContentFeedback = (percentage) => {
+    SetIsFeedbackOpen(false);
+    try {
+      const db = firebase.firestore();
+      db.collection("Content")
+        .doc(content.id)
+        .collection("Reviews")
+        .doc(firebase.auth().currentUser.uid)
+        .set({ percentage: percentage });
+    } catch (err) {
+      Alert.alert("¡Hubo un problema!", err.message);
+    }
+  };
+
+  const HandleContentFeedbackModalDismiss = () => {
+    SetIsFeedbackOpen(false);
+  };
+
   const HandleBookmarkButton = () => {
     let userClone = JSON.parse(JSON.stringify(userState.value));
     let bookmarkIndex = userClone.userData.bookmarks.findIndex(
@@ -291,7 +309,10 @@ export default function MediaPlayer({ route, navigation }) {
         </View>
 
         {isFeedbackOpen && (
-          <ContentFeedbackModal dismissState={SetIsFeedbackOpen} />
+          <ContentFeedbackModal
+            feedbackCallback={HandleContentFeedback}
+            dismissCallback={HandleContentFeedbackModalDismiss}
+          />
         )}
       </View>
 

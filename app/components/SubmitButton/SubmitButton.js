@@ -5,26 +5,34 @@ import { LightenDarkenColor } from "lighten-darken-color";
 import { SubmitButtonStyles } from "./SubmitButtonStyles";
 import { AppColors } from "../../config/AppColors";
 
-export default function SubmitButton(props) {
+export const SubmitButton = ({
+  color,
+  style,
+  labelStyle,
+  children,
+  onPress,
+}) => {
   return (
     <View
       style={[
         SubmitButtonStyles.container,
-        { backgroundColor: props.color || AppColors.primary },
-        props.style,
+        { backgroundColor: color || AppColors.primary },
+        style,
       ]}
     >
       <TouchableNativeFeedback
-        onPress={props.onPress}
+        onPress={onPress}
         background={TouchableNativeFeedback.Ripple(
-          LightenDarkenColor(props.color || AppColors.primary, 50),
+          LightenDarkenColor(color || AppColors.primary, 50),
           true
         )}
       >
         <View style={[SubmitButtonStyles.button]}>
-          <Text style={SubmitButtonStyles.buttonTitle}>{props.children}</Text>
+          <Text style={[SubmitButtonStyles.buttonTitle, labelStyle]}>
+            {children}
+          </Text>
         </View>
       </TouchableNativeFeedback>
     </View>
   );
-}
+};
