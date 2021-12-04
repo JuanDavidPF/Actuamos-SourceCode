@@ -8,4 +8,5 @@ export const AppColors = {
   black: "#1D1449",
   white: "#DDE5F8",
   modalBackground: "rgba(255, 255, 255, 0.075)",
+  secondaryModalBackground: "rgba(102, 133, 198, 0.75)",
 };

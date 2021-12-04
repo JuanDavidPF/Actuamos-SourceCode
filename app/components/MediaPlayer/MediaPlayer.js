@@ -1,9 +1,10 @@
 //react imports
 import Slider from "@react-native-community/slider";
-import { useRoute } from "@react-navigation/core";
+
 import { Audio, Video } from "expo-av";
 import React, { useContext, useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
+
 import {
   TouchableHighlight,
   TouchableWithoutFeedback,
@@ -26,6 +27,7 @@ import { SecondsToHMS } from "../../utils/TimeConvertions";
 
 //styles
 import { MediaPlayerStyles } from "./MediaPlayerStyles";
+import ContentFeedbackModal from "../../containers/ContentFeedbackModal/ContentFeedbackModal";
 
 //icons
 const icons = {
@@ -35,6 +37,8 @@ const icons = {
   pauseButton: require("../../assets/images/icons/contentPlayer/pauseTrack.png"),
   favouriteIcon: require("../../assets/images/icons/navbar/bookmarkFocused.png"),
   unFavouriteIcon: require("../../assets/images/icons/navbar/bookmark.png"),
+  feedback: require("../../assets/images/icons/contentPlayer/feedback.png"),
+  feedbackFocused: require("../../assets/images/icons/contentPlayer/feedbackFocused.png"),
 };
 
 export default function MediaPlayer({ route, navigation }) {
@@ -52,6 +56,7 @@ export default function MediaPlayer({ route, navigation }) {
   const [Loaded, SetLoaded] = React.useState(false);
   const [Loading, SetLoading] = React.useState(false);
   const [Playing, SetPlaying] = React.useState(false);
+  const [isFeedbackOpen, SetIsFeedbackOpen] = React.useState(false);
 
   const FileType = GetFileType(content.link);
 
@@ -105,7 +110,7 @@ export default function MediaPlayer({ route, navigation }) {
         : null;
 
     Load();
-
+    SetIsFeedbackOpen(false);
     return () => Unload();
   }, [content]);
 
@@ -115,13 +120,16 @@ export default function MediaPlayer({ route, navigation }) {
     setContentProgress(status.positionMillis / 1000);
     if (status.didJustFinish) {
       mediaReference.setPositionAsync(0);
+      SetIsFeedbackOpen(true);
       Pause();
     }
   };
+
   const Unload = async () => {
     if (sound.current) await sound.current.unloadAsync();
     if (video.current) await video.current.unloadAsync();
   };
+
   const Load = async () => {
     if (Loading) return;
     if (!mediaReference) return;
@@ -250,18 +258,43 @@ export default function MediaPlayer({ route, navigation }) {
 
         <View style={MediaPlayerStyles.information}>
           <Text style={MediaPlayerStyles.title}>{content.title}</Text>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              HandleBookmarkButton();
+          <View
+            style={{
+              flexDirection: "row",
             }}
           >
-            <Image
-              style={{ width: 35, height: 35, resizeMode: "contain" }}
-              source={favourite ? icons.favouriteIcon : icons.unFavouriteIcon}
-            />
-          </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => HandleBookmarkButton()}>
+              <Image
+                style={{
+                  width: 37,
+                  height: 37,
+                  resizeMode: "contain",
+                }}
+                source={favourite ? icons.favouriteIcon : icons.unFavouriteIcon}
+              />
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => SetIsFeedbackOpen(!isFeedbackOpen)}
+            >
+              <Image
+                style={{
+                  marginTop: 5,
+                  marginLeft: 10,
+                  width: 25,
+                  height: 25,
+                  resizeMode: "contain",
+                }}
+                source={isFeedbackOpen ? icons.feedbackFocused : icons.feedback}
+              />
+            </TouchableWithoutFeedback>
+          </View>
         </View>
+
+        {isFeedbackOpen && (
+          <ContentFeedbackModal dismissState={SetIsFeedbackOpen} />
+        )}
       </View>
+
       <View style={MediaPlayerStyles.controls}>
         <Slider
           onValueChange={(value) => {
